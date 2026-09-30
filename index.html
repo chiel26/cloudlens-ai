@@ -1428,6 +1428,35 @@ footer{
 }
 
 
+
+/* =========================================================
+   HERO — ANIMATED CLOUDS ONLY
+   ========================================================= */
+.hero-cloud-only{min-height:360px;padding:0;position:relative;overflow:hidden;isolation:isolate}
+.hero-cloud-only::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 48%,rgba(126,224,255,.17),transparent 28%),radial-gradient(circle at 70% 30%,rgba(135,103,255,.10),transparent 26%);animation:cloudSceneGlow 6s ease-in-out infinite alternate}
+.cloud-scene{position:relative;width:100%;height:100%;min-height:360px;overflow:hidden;border-radius:inherit;transform:translateZ(0)}
+.cloud-scene::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 22% 30%,rgba(255,255,255,.07) 0 1px,transparent 1.8px),radial-gradient(circle at 78% 24%,rgba(117,229,255,.16) 0 1.5px,transparent 2.2px),radial-gradient(circle at 63% 74%,rgba(181,154,255,.12) 0 1px,transparent 1.8px);background-size:84px 84px,116px 116px,142px 142px;opacity:.62;animation:cloudStarsDrift 16s linear infinite}
+.css-cloud{position:absolute;width:190px;height:62px;border-radius:999px;background:linear-gradient(180deg,#fff 0%,#edf6ff 56%,#cbd6f3 100%);box-shadow:0 18px 32px rgba(0,4,28,.28),inset 0 5px 13px rgba(255,255,255,.92),inset 0 -10px 18px rgba(137,146,214,.23),0 0 30px rgba(113,210,255,.13);filter:drop-shadow(0 10px 18px rgba(1,8,33,.18));will-change:transform}
+.cloud-puff{position:absolute;display:block;border-radius:50%;background:radial-gradient(circle at 34% 28%,#fff 0%,#f4f8ff 43%,#d8def6 76%,#bec7ea 100%);box-shadow:inset 5px 7px 11px rgba(255,255,255,.88),inset -8px -10px 17px rgba(130,139,207,.16)}
+.puff-1{width:84px;height:84px;left:26px;bottom:14px}.puff-2{width:104px;height:104px;left:67px;bottom:18px}.puff-3{width:77px;height:77px;right:12px;bottom:8px}
+.cloud-highlight{position:absolute;left:34px;top:-32px;width:78px;height:40px;border-radius:50%;background:rgba(255,255,255,.52);filter:blur(10px);transform:rotate(-12deg)}
+.cloud-main-visual{width:230px;height:74px;left:50%;top:49%;z-index:6;transform:translate(-50%,-50%);animation:mainCloudFloat 5.2s ease-in-out infinite}
+.cloud-main-visual .puff-1{width:100px;height:100px;left:28px;bottom:17px}.cloud-main-visual .puff-2{width:126px;height:126px;left:75px;bottom:20px}.cloud-main-visual .puff-3{width:92px;height:92px;right:10px;bottom:10px}
+.cloud-back{opacity:.34;transform:scale(.60);filter:blur(1px);z-index:2}.cloud-mid{opacity:.60;transform:scale(.78);z-index:3}.cloud-front{opacity:.56;transform:scale(.68);z-index:4}
+.cloud-1{top:18%;left:-35%;animation:cloudTravelBack 20s linear infinite}.cloud-2{top:65%;left:-42%;animation:cloudTravelMid 15s linear infinite 2s}.cloud-4{top:31%;left:-38%;animation:cloudTravelFront 12s linear infinite 4s}
+.cloud-orbit{position:absolute;left:50%;top:50%;border:1px solid rgba(105,219,255,.10);border-radius:50%;pointer-events:none}.cloud-orbit-a{width:280px;height:280px;margin:-140px 0 0 -140px;animation:cloudOrbitSpin 18s linear infinite}.cloud-orbit-b{width:390px;height:210px;margin:-105px 0 0 -195px;border-color:rgba(145,111,255,.08);transform:rotate(-13deg);animation:cloudOrbitPulse 7s ease-in-out infinite alternate}
+.cloud-spark{position:absolute;width:5px;height:5px;border-radius:50%;background:#baf5ff;box-shadow:0 0 12px rgba(96,224,255,.85);opacity:.32;animation:cloudSpark 3.6s ease-in-out infinite}.spark-1{left:22%;top:28%;animation-delay:.2s}.spark-2{right:23%;top:22%;animation-delay:1.2s}.spark-3{left:29%;bottom:22%;animation-delay:2.1s}.spark-4{right:30%;bottom:28%;animation-delay:2.8s}
+@keyframes mainCloudFloat{0%,100%{transform:translate(-50%,-50%) translateY(0) rotate(-1deg) scale(1)}50%{transform:translate(-50%,-50%) translateY(-15px) rotate(1deg) scale(1.025)}}
+@keyframes cloudTravelBack{from{transform:translateX(0) scale(.60)}to{transform:translateX(900px) scale(.60)}}
+@keyframes cloudTravelMid{from{transform:translateX(0) scale(.78)}to{transform:translateX(980px) scale(.78)}}
+@keyframes cloudTravelFront{from{transform:translateX(0) scale(.68)}to{transform:translateX(930px) scale(.68)}}
+@keyframes cloudSceneGlow{from{opacity:.70;transform:scale(.98)}to{opacity:1;transform:scale(1.05)}}
+@keyframes cloudStarsDrift{from{background-position:0 0,20px 30px,40px 60px}to{background-position:84px 30px,136px 65px,182px 90px}}
+@keyframes cloudOrbitSpin{to{transform:rotate(360deg)}}@keyframes cloudOrbitPulse{from{opacity:.35;transform:rotate(-13deg) scale(.93)}to{opacity:.85;transform:rotate(-13deg) scale(1.05)}}@keyframes cloudSpark{0%,100%{opacity:.12;transform:scale(.72)}50%{opacity:.70;transform:scale(1.35)}}
+@media(max-width:900px){.hero-cloud-only,.cloud-scene{min-height:310px}.cloud-main-visual{transform:translate(-50%,-50%) scale(.88)}}
+@media(max-width:620px){.hero-cloud-only,.cloud-scene{min-height:245px}.cloud-main-visual{width:190px;height:61px}.cloud-main-visual .puff-1{width:82px;height:82px}.cloud-main-visual .puff-2{width:105px;height:105px;left:63px}.cloud-main-visual .puff-3{width:75px;height:75px}}
+@media(prefers-reduced-motion:reduce){.css-cloud,.cloud-orbit,.cloud-spark,.cloud-scene::before,.hero-cloud-only::after{animation:none!important}}
+
 </style>
 
 <link rel="stylesheet" href="theme.css">\n</head>
@@ -1493,30 +1522,41 @@ footer{
 
 
 
-  <div class="hero-card">
+  <div class="hero-card hero-cloud-only" aria-label="Animated cloud scene">
+    <div class="cloud-scene" aria-hidden="true">
+      <div class="cloud-orbit cloud-orbit-a"></div>
+      <div class="cloud-orbit cloud-orbit-b"></div>
 
-    <div>
-
-      <div class="hero-cloud">☁️</div>
-
-      <h3>1 AI Model · 10 Cloud Classes</h3>
-
-      <p>Image → AI Classification → Cloud Knowledge → Environmental Context</p>
-
-      <div class="feature-row">
-
-        <span class="feature-chip">10 Cloud Types</span>
-
-        <span class="feature-chip">Confidence</span>
-
-        <span class="feature-chip">Top 3</span>
-
-        <span class="feature-chip">Environment</span>
-
+      <div class="css-cloud cloud-back cloud-1">
+        <span class="cloud-puff puff-1"></span>
+        <span class="cloud-puff puff-2"></span>
+        <span class="cloud-puff puff-3"></span>
       </div>
 
-    </div>
+      <div class="css-cloud cloud-mid cloud-2">
+        <span class="cloud-puff puff-1"></span>
+        <span class="cloud-puff puff-2"></span>
+        <span class="cloud-puff puff-3"></span>
+      </div>
 
+      <div class="css-cloud cloud-main-visual cloud-3">
+        <span class="cloud-puff puff-1"></span>
+        <span class="cloud-puff puff-2"></span>
+        <span class="cloud-puff puff-3"></span>
+        <span class="cloud-highlight"></span>
+      </div>
+
+      <div class="css-cloud cloud-front cloud-4">
+        <span class="cloud-puff puff-1"></span>
+        <span class="cloud-puff puff-2"></span>
+        <span class="cloud-puff puff-3"></span>
+      </div>
+
+      <div class="cloud-spark spark-1"></div>
+      <div class="cloud-spark spark-2"></div>
+      <div class="cloud-spark spark-3"></div>
+      <div class="cloud-spark spark-4"></div>
+    </div>
   </div>
 
 </section>
