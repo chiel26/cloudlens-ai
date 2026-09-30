@@ -1,0 +1,4559 @@
+<!DOCTYPE html>
+<!-- GitHub Pages target: https://chiel26.github.io/cloudlens-ai/ -->
+
+<html lang="th">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CloudLens AI</title>
+
+<meta name="theme-color" content="#dff4ff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="CloudLens AI">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+
+
+
+<!-- Teachable Machine runtime -->
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.3/dist/teachablemachine-image.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exifr/dist/full.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+
+
+<style>
+
+:root{
+
+  --bg1:#dff4ff;
+
+  --bg2:#f8fbfd;
+
+  --bg3:#edf8f4;
+
+  --card:rgba(255,255,255,.88);
+
+  --ink:#173042;
+
+  --muted:#6c8190;
+
+  --blue:#287fa8;
+
+  --navy:#173f56;
+
+  --line:#dce9ef;
+
+  --green:#18856b;
+
+  --yellow:#9b6a19;
+
+  --red:#a93f3f;
+
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+
+  margin:0;
+
+  min-height:100vh;
+
+  font-family:Arial,"Noto Sans Thai",sans-serif;
+
+  color:var(--ink);
+
+  background:
+
+    radial-gradient(circle at 15% 5%,rgba(255,255,255,.9),transparent 27%),
+
+    linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 48%,var(--bg3) 100%);
+
+}
+
+.container{width:min(1180px,calc(100% - 28px));margin:auto}
+
+header{
+
+  min-height:78px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:16px;
+
+}
+
+.logo{font-size:24px;font-weight:800;letter-spacing:-.5px}
+
+.logo span{color:var(--blue)}
+
+.model-status{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  padding:9px 12px;
+
+  border-radius:999px;
+
+  font-size:12px;
+
+  font-weight:700;
+
+  background:#fff1d7;
+
+  color:#8f641e;
+
+}
+
+.model-status.ready{background:#e4f6ee;color:var(--green)}
+
+.model-status.error{background:#ffe8e8;color:var(--red)}
+
+.dot{
+
+  width:8px;height:8px;border-radius:50%;
+
+  background:currentColor;display:inline-block;
+
+}
+
+.hero{
+
+  padding:52px 0 40px;
+
+  display:grid;
+
+  grid-template-columns:1.08fr .92fr;
+
+  gap:38px;
+
+  align-items:center;
+
+}
+
+.hero h1{
+
+  margin:0 0 22px;
+
+  font-size:clamp(50px,7vw,82px);
+
+  line-height:.96;
+
+  letter-spacing:-3px;
+
+}
+
+.hero h1 span{color:var(--blue)}
+
+.hero p{
+
+  max-width:650px;
+
+  margin:0;
+
+  font-size:18px;
+
+  line-height:1.8;
+
+  color:var(--muted);
+
+}
+
+.hero-card{
+
+  min-height:300px;
+
+  display:grid;
+
+  place-items:center;
+
+  text-align:center;
+
+  padding:28px;
+
+  border-radius:32px;
+
+  border:1px solid rgba(255,255,255,.96);
+
+  background:rgba(255,255,255,.55);
+
+  box-shadow:0 26px 65px rgba(37,83,109,.12);
+
+  backdrop-filter:blur(12px);
+
+}
+
+.hero-cloud{font-size:90px}
+
+.hero-card h3{margin:8px 0}
+
+.hero-card p{font-size:14px;line-height:1.65}
+
+.feature-row{
+
+  display:flex;
+
+  justify-content:center;
+
+  flex-wrap:wrap;
+
+  gap:8px;
+
+  margin-top:14px;
+
+}
+
+.feature-chip{
+
+  padding:8px 11px;
+
+  border-radius:999px;
+
+  background:rgba(232,246,251,.95);
+
+  color:#315f74;
+
+  font-size:12px;
+
+  font-weight:700;
+
+}
+
+.main-grid{
+
+  display:grid;
+
+  grid-template-columns:.92fr 1.08fr;
+
+  gap:22px;
+
+  align-items:start;
+
+}
+
+.card{
+
+  background:var(--card);
+
+  border:1px solid rgba(255,255,255,.96);
+
+  border-radius:27px;
+
+  padding:22px;
+
+  box-shadow:0 18px 55px rgba(36,82,109,.10);
+
+}
+
+.card h2{margin:0 0 18px;font-size:28px}
+
+.upload-box{
+
+  min-height:455px;
+
+  border:2px dashed #9ac7d9;
+
+  border-radius:22px;
+
+  background:linear-gradient(145deg,#f4fcff,#edf8fb);
+
+  display:grid;
+
+  place-items:center;
+
+  overflow:hidden;
+
+  position:relative;
+
+}
+
+.upload-empty{text-align:center;padding:32px}
+
+.upload-empty .icon{font-size:64px}
+
+.upload-empty p{line-height:1.65;color:var(--muted)}
+
+#preview{
+
+  width:100%;
+
+  height:455px;
+
+  display:none;
+
+  object-fit:contain;
+
+  background:#dcebf2;
+
+}
+
+.actions{display:flex;gap:10px;margin-top:14px}
+
+button{
+
+  border:0;
+
+  border-radius:14px;
+
+  padding:14px 18px;
+
+  cursor:pointer;
+
+  font-weight:700;
+
+  font-size:14px;
+
+  transition:.2s ease;
+
+}
+
+button:hover{transform:translateY(-1px)}
+
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+.primary{background:var(--navy);color:white}
+
+.primary:hover{background:#1d5571}
+
+.secondary{background:#e8f5fa;color:#285d75}
+
+.actions button{flex:1}
+
+.result-card{min-height:560px}
+
+.placeholder{
+
+  min-height:510px;
+
+  display:grid;
+
+  place-items:center;
+
+  text-align:center;
+
+  color:#83959e;
+
+}
+
+.placeholder .icon{font-size:74px}
+
+.result-top{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:14px;
+
+  align-items:flex-start;
+
+  margin-bottom:4px;
+
+}
+
+.badge{
+
+  display:inline-block;
+
+  padding:7px 12px;
+
+  border-radius:999px;
+
+  background:#e0f6ed;
+
+  color:#17765f;
+
+  font-size:12px;
+
+  font-weight:800;
+
+}
+
+.badge.low{background:#fff0d1;color:var(--yellow)}
+
+.cloud-title{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:17px;
+
+  margin:18px 0;
+
+}
+
+.cloud-icon{
+
+  width:82px;
+
+  height:82px;
+
+  flex:0 0 82px;
+
+  border-radius:23px;
+
+  background:#e6f5fb;
+
+  display:grid;
+
+  place-items:center;
+
+  font-size:42px;
+
+}
+
+.cloud-title h2{font-size:34px;margin:0}
+
+.cloud-title p{margin:4px 0 0;color:var(--muted)}
+
+.cloud-code{
+
+  font-weight:800;
+
+  color:#4d7284;
+
+  margin-left:6px;
+
+}
+
+.info-grid{
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:10px;
+
+}
+
+.info{
+
+  padding:14px;
+
+  border:1px solid #e1edf2;
+
+  border-radius:16px;
+
+  background:#f3f9fb;
+
+}
+
+.info.full{grid-column:1/-1}
+
+.info h3{
+
+  margin:0 0 7px;
+
+  color:#4e7487;
+
+  font-size:13px;
+
+}
+
+.info p{
+
+  margin:0;
+
+  font-size:14px;
+
+  line-height:1.68;
+
+}
+
+.warning{background:#fff6dc;border-color:#f0d9a0}
+
+.danger{background:#ffe9e9;border-color:#efbcbc}
+
+.predictions{
+
+  margin-top:18px;
+
+  padding-top:15px;
+
+  border-top:1px solid var(--line);
+
+}
+
+.pred-row{
+
+  display:grid;
+
+  grid-template-columns:145px 1fr 56px;
+
+  gap:10px;
+
+  align-items:center;
+
+  margin:10px 0;
+
+  font-size:12px;
+
+}
+
+.bar{
+
+  height:9px;
+
+  background:#e6edf1;
+
+  border-radius:999px;
+
+  overflow:hidden;
+
+}
+
+.fill{
+
+  height:100%;
+
+  background:linear-gradient(90deg,#4aa7ce,#65c6c0);
+
+}
+
+.note{
+
+  margin-top:17px;
+
+  font-size:11px;
+
+  line-height:1.7;
+
+  color:#7e919b;
+
+}
+
+.low-confidence{
+
+  display:none;
+
+  margin-bottom:13px;
+
+  padding:12px 14px;
+
+  border-radius:14px;
+
+  background:#fff5d9;
+
+  color:#805c1f;
+
+  font-size:13px;
+
+  line-height:1.55;
+
+}
+
+footer{
+
+  text-align:center;
+
+  padding:42px 0 58px;
+
+  color:#84969f;
+
+  font-size:12px;
+
+}
+
+@media(max-width:900px){
+
+  .hero,.main-grid{grid-template-columns:1fr}
+
+}
+
+@media(max-width:620px){
+
+  .container{width:min(100% - 20px,1180px)}
+
+  .hero{padding-top:30px}
+
+  .hero h1{font-size:50px}
+
+  .info-grid{grid-template-columns:1fr}
+
+  .info.full{grid-column:auto}
+
+  .upload-box{min-height:350px}
+
+  #preview{height:350px}
+
+  .pred-row{grid-template-columns:105px 1fr 48px}
+
+  .result-top{display:block}
+
+}
+
+
+
+/* ================================
+
+   CLOUD ATLAS + SKY JOURNAL
+
+   ================================ */
+
+
+
+.header-right{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:14px;
+
+  flex-wrap:wrap;
+
+  justify-content:flex-end;
+
+}
+
+
+
+.nav-links{
+
+  display:flex;
+
+  gap:8px;
+
+  flex-wrap:wrap;
+
+}
+
+
+
+.nav-links a{
+
+  color:#456c80;
+
+  text-decoration:none;
+
+  font-size:13px;
+
+  font-weight:700;
+
+  padding:8px 10px;
+
+  border-radius:999px;
+
+}
+
+
+
+.nav-links a:hover{
+
+  background:rgba(255,255,255,.7);
+
+}
+
+
+
+.section-block{
+
+  margin-top:28px;
+
+}
+
+
+
+.section-heading{
+
+  margin-bottom:16px;
+
+}
+
+
+
+.section-heading h2{
+
+  margin:0 0 6px;
+
+  font-size:30px;
+
+}
+
+
+
+.section-heading p{
+
+  margin:0;
+
+  color:var(--muted);
+
+  line-height:1.65;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.result-actions{
+
+  display:flex;
+
+  gap:10px;
+
+  margin-top:16px;
+
+}
+
+
+
+.result-actions button{
+
+  flex:1;
+
+}
+
+
+
+.journal-toolbar{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:12px;
+
+  align-items:center;
+
+  margin-bottom:14px;
+
+}
+
+
+
+.journal-count{
+
+  color:var(--muted);
+
+  font-size:13px;
+
+}
+
+
+
+.journal-grid{
+
+  display:grid;
+
+  grid-template-columns:repeat(3,minmax(0,1fr));
+
+  gap:14px;
+
+}
+
+
+
+.journal-empty{
+
+  grid-column:1/-1;
+
+  text-align:center;
+
+  padding:34px;
+
+  color:var(--muted);
+
+  background:rgba(255,255,255,.66);
+
+  border:1px dashed #b6d2df;
+
+  border-radius:20px;
+
+}
+
+
+
+.journal-card{
+
+  background:rgba(255,255,255,.88);
+
+  border:1px solid rgba(255,255,255,.96);
+
+  border-radius:20px;
+
+  overflow:hidden;
+
+  box-shadow:0 12px 32px rgba(36,82,109,.08);
+
+}
+
+
+
+.journal-thumb{
+
+  width:100%;
+
+  aspect-ratio:16/10;
+
+  object-fit:cover;
+
+  background:#dceaf1;
+
+  display:block;
+
+}
+
+
+
+.journal-body{
+
+  padding:14px;
+
+}
+
+
+
+.journal-body h3{
+
+  margin:0 0 4px;
+
+  font-size:18px;
+
+}
+
+
+
+.journal-body .sub{
+
+  color:var(--muted);
+
+  font-size:12px;
+
+  margin-bottom:10px;
+
+}
+
+
+
+.journal-body .score{
+
+  display:inline-block;
+
+  padding:6px 9px;
+
+  border-radius:999px;
+
+  background:#e3f5ed;
+
+  color:var(--green);
+
+  font-weight:800;
+
+  font-size:11px;
+
+}
+
+
+
+.toast{
+
+  position:fixed;
+
+  right:20px;
+
+  bottom:20px;
+
+  z-index:50;
+
+  padding:13px 16px;
+
+  border-radius:14px;
+
+  background:#173f56;
+
+  color:white;
+
+  box-shadow:0 14px 36px rgba(20,55,75,.22);
+
+  font-size:13px;
+
+  opacity:0;
+
+  transform:translateY(10px);
+
+  pointer-events:none;
+
+  transition:.22s ease;
+
+}
+
+
+
+.toast.show{
+
+  opacity:1;
+
+  transform:translateY(0);
+
+}
+
+
+
+@media(max-width:900px){
+
+  .header-right{gap:8px}
+
+    .journal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+}
+
+
+
+@media(max-width:620px){
+
+  header{align-items:flex-start;padding:16px 0}
+
+  .header-right{justify-content:flex-start}
+
+  .nav-links{width:100%}
+
+  .journal-grid{grid-template-columns:1fr}
+
+  .journal-toolbar{align-items:flex-start;flex-direction:column}
+
+  .result-actions{flex-direction:column}
+
+}
+
+
+
+
+
+/* ================================
+
+   LOCATION
+
+   ================================ */
+
+
+
+.location-panel{
+
+  margin-top:16px;
+
+  padding:16px;
+
+  border-radius:18px;
+
+  border:1px solid #dceaf0;
+
+  background:rgba(247,252,254,.95);
+
+}
+
+
+
+.location-panel h3{
+
+  margin:0 0 7px;
+
+  font-size:15px;
+
+}
+
+
+
+.location-help{
+
+  margin:0 0 12px;
+
+  color:var(--muted);
+
+  font-size:12px;
+
+  line-height:1.6;
+
+}
+
+
+
+.location-actions{
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:9px;
+
+}
+
+
+
+.location-manual{
+
+  display:flex;
+
+  gap:8px;
+
+  margin-top:9px;
+
+}
+
+
+
+.location-manual input{
+
+  min-width:0;
+
+  flex:1;
+
+  border:1px solid #cfdee5;
+
+  border-radius:12px;
+
+  padding:12px 13px;
+
+  outline:none;
+
+  font-family:inherit;
+
+  color:var(--ink);
+
+  background:white;
+
+}
+
+
+
+.location-manual input:focus{
+
+  border-color:#6ba9c3;
+
+}
+
+
+
+.location-status{
+
+  margin-top:11px;
+
+  padding:11px 12px;
+
+  border-radius:12px;
+
+  background:#edf6f9;
+
+  color:#527486;
+
+  font-size:12px;
+
+  line-height:1.55;
+
+}
+
+
+
+.location-status.good{
+
+  background:#e4f6ee;
+
+  color:#17745e;
+
+}
+
+
+
+.location-status.error{
+
+  background:#ffeaea;
+
+  color:#9c4141;
+
+}
+
+
+
+.location-result{
+
+  background:#eef8fb;
+
+}
+
+
+
+.location-source{
+
+  margin-top:5px;
+
+  color:#78909c;
+
+  font-size:11px;
+
+}
+
+
+
+.journal-location{
+
+  margin:9px 0 0;
+
+  color:#526f7d;
+
+  font-size:12px;
+
+  line-height:1.55;
+
+}
+
+
+
+@media(max-width:620px){
+
+  .location-actions{
+
+    grid-template-columns:1fr;
+
+  }
+
+
+
+  .location-manual{
+
+    flex-direction:column;
+
+  }
+
+}
+
+
+
+
+/* ================================
+   UPLOAD / REAL-TIME CAMERA
+   ================================ */
+
+.input-mode-switch{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:14px;
+  padding:5px;
+  border-radius:16px;
+  background:#edf5f8;
+}
+
+.mode-button{
+  margin:0;
+  background:transparent;
+  color:#5a7684;
+}
+
+.mode-button.active{
+  background:white;
+  color:#173f56;
+  box-shadow:0 5px 16px rgba(38,81,104,.09);
+}
+
+#cameraVideo{
+  width:100%;
+  height:455px;
+  object-fit:cover;
+  background:#10212a;
+  display:none;
+}
+
+.camera-live-badge{
+  position:absolute;
+  top:14px;
+  left:14px;
+  z-index:5;
+  display:none;
+  max-width:calc(100% - 28px);
+  padding:9px 12px;
+  border-radius:999px;
+  background:rgba(17,43,57,.82);
+  color:white;
+  font-size:12px;
+  font-weight:800;
+  backdrop-filter:blur(8px);
+}
+
+.camera-live-badge.show{display:block}
+
+.camera-live-badge .live-dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  margin-right:7px;
+  border-radius:50%;
+  background:#ff625f;
+  vertical-align:1px;
+}
+
+.camera-help{
+  display:none;
+  margin-top:10px;
+  padding:11px 13px;
+  border-radius:13px;
+  background:#edf8fc;
+  color:#567888;
+  font-size:12px;
+  line-height:1.55;
+}
+
+.camera-help.show{display:block}
+
+#uploadActions,
+#cameraActions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
+
+#uploadActions button,
+#cameraActions button{flex:1}
+
+@media(max-width:620px){
+  #cameraVideo{height:350px}
+  #uploadActions,
+  #cameraActions{flex-direction:column}
+}
+
+
+/* ================================
+   REAL-TIME PRO ENHANCEMENTS
+   ================================ */
+
+.badge.high{
+  background:#e0f6ed;
+  color:#17765f;
+}
+
+.badge.medium{
+  background:#fff0d1;
+  color:#8a611a;
+}
+
+.badge.low{
+  background:#ffe7e7;
+  color:#a13d3d;
+}
+
+.camera-live-badge{
+  line-height:1.4;
+}
+
+.live-subtext{
+  opacity:.78;
+  font-weight:600;
+  margin-left:6px;
+}
+
+#switchCameraButton{
+  white-space:nowrap;
+}
+
+
+/* ================================
+   FINAL PRO: UNKNOWN + EXPORT + EVALUATION
+   ================================ */
+
+.unknown-box{
+  display:none;
+  margin-bottom:13px;
+  padding:13px 14px;
+  border-radius:14px;
+  background:#fff0f0;
+  border:1px solid #efc1c1;
+  color:#923c3c;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.unknown-box.show{
+  display:block;
+}
+
+.result-actions{
+  flex-wrap:wrap;
+}
+
+.result-actions button{
+  min-width:170px;
+}
+
+.export-card{
+  position:fixed;
+  left:-10000px;
+  top:0;
+  width:760px;
+  padding:34px;
+  background:#f7fbfd;
+  color:#173042;
+  font-family:Arial,"Noto Sans Thai",sans-serif;
+  border-radius:28px;
+}
+
+.export-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+}
+
+.export-brand{
+  font-size:28px;
+  font-weight:800;
+}
+
+.export-brand span{
+  color:#287fa8;
+}
+
+.export-date{
+  color:#6c8190;
+  font-size:13px;
+}
+
+.export-image{
+  width:100%;
+  max-height:390px;
+  object-fit:contain;
+  background:#e8f2f6;
+  border-radius:22px;
+  display:block;
+  margin-bottom:22px;
+}
+
+.export-main{
+  display:flex;
+  gap:18px;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.export-main-icon{
+  width:76px;
+  height:76px;
+  border-radius:22px;
+  background:#e6f5fb;
+  display:grid;
+  place-items:center;
+  font-size:40px;
+  flex:0 0 76px;
+}
+
+.export-main h2{
+  margin:0 0 5px;
+  font-size:31px;
+}
+
+.export-main p{
+  margin:0;
+  color:#6c8190;
+}
+
+.export-confidence{
+  display:inline-block;
+  margin:10px 0 0;
+  padding:7px 11px;
+  border-radius:999px;
+  background:#e4f6ee;
+  color:#17765f;
+  font-weight:800;
+  font-size:12px;
+}
+
+.export-info{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.export-info-box{
+  padding:14px;
+  border-radius:15px;
+  background:white;
+  border:1px solid #e1edf2;
+}
+
+.export-info-box.full{
+  grid-column:1/-1;
+}
+
+.export-info-box strong{
+  display:block;
+  margin-bottom:6px;
+  color:#4e7487;
+  font-size:12px;
+}
+
+.export-info-box div{
+  font-size:13px;
+  line-height:1.6;
+}
+
+@media(max-width:620px){
+  .result-actions button{
+    width:100%;
+    min-width:0;
+  }
+}
+
+
+</style>
+
+</head>
+
+
+
+<body>
+
+<div class="container">
+
+
+
+<header>
+
+  <div class="logo">CloudLens <span>AI</span></div>
+
+
+
+  <div class="header-right">
+
+    <nav class="nav-links">
+
+      <a href="#analyze">วิเคราะห์</a>
+
+      <a href="#journal">My Sky Log</a>
+      <a href="qr.html">แชร์ / QR</a>
+
+    </nav>
+
+
+
+    <div id="modelStatus" class="model-status">
+
+      <span class="dot"></span>
+
+      <span id="modelStatusText">กำลังโหลด AI Model...</span>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+
+<section class="hero">
+
+  <div>
+
+    <h1>รู้จักเมฆ<br><span>เข้าใจท้องฟ้า</span></h1>
+
+    <p>
+
+      เลือกอัปโหลดภาพ หรือเปิดกล้อง Real Time ให้ CloudLens AI จำแนกเมฆ 10 ชนิดด้วยโมเดล
+
+      Google Teachable Machine พร้อมตรวจสถานที่จาก GPS/EXIF ของไฟล์ภาพโดยอัตโนมัติ
+
+      และสิ่งที่อาจเกิดขึ้นเมื่อพบเมฆชนิดนั้น
+
+    </p>
+
+  </div>
+
+
+
+  <div class="hero-card">
+
+    <div>
+
+      <div class="hero-cloud">☁️</div>
+
+      <h3>1 AI Model · 10 Cloud Classes</h3>
+
+      <p>Image → AI Classification → Cloud Knowledge → Environmental Context</p>
+
+      <div class="feature-row">
+
+        <span class="feature-chip">10 Cloud Types</span>
+
+        <span class="feature-chip">Confidence</span>
+
+        <span class="feature-chip">Top 3</span>
+
+        <span class="feature-chip">Environment</span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<section id="analyze" class="main-grid">
+
+
+
+  <div class="card">
+
+    <h2>ภาพท้องฟ้า</h2>
+
+    <div class="input-mode-switch">
+      <button
+        id="uploadModeButton"
+        class="mode-button active"
+        onclick="setInputMode('upload')">
+        🖼️ อัปโหลดรูป
+      </button>
+
+      <button
+        id="cameraModeButton"
+        class="mode-button"
+        onclick="setInputMode('camera')">
+        📷 กล้อง Real Time
+      </button>
+    </div>
+
+    <input id="imageInput" type="file" accept="image/*" hidden>
+
+    <div class="upload-box">
+      <div id="uploadEmpty" class="upload-empty">
+        <div class="icon">🌤️</div>
+        <h3 id="inputTitle">เลือกภาพเมฆ</h3>
+        <p id="inputDescription">
+          เลือกรูปจากเครื่อง ควรให้รูปทรงเมฆเห็นชัด
+          และให้ท้องฟ้าเป็นส่วนหลักของภาพ
+        </p>
+        <button id="mainSelectButton" class="primary" onclick="chooseImage()">
+          เลือกภาพจากเครื่อง
+        </button>
+      </div>
+
+      <img id="preview" alt="ภาพที่เลือก">
+
+      <video
+        id="cameraVideo"
+        autoplay
+        playsinline
+        muted>
+      </video>
+
+      <div id="cameraLiveBadge" class="camera-live-badge">
+        <span class="live-dot"></span>
+        <span id="livePredictionText">กำลังเตรียมกล้อง...</span>
+      </div>
+
+      <canvas id="captureCanvas" hidden></canvas>
+    </div>
+
+    <div id="uploadActions">
+      <button class="secondary" onclick="chooseImage()">เปลี่ยนภาพ</button>
+
+      <button
+        id="analyzeButton"
+        class="primary"
+        onclick="analyzeImage()"
+        disabled>
+        วิเคราะห์เมฆ
+      </button>
+    </div>
+
+    <div id="cameraActions" style="display:none">
+      <button
+        id="startCameraButton"
+        class="secondary"
+        onclick="startCamera()">
+        เปิดกล้อง
+      </button>
+
+      <button
+        id="switchCameraButton"
+        class="secondary"
+        onclick="switchCamera()">
+        🔄 สลับกล้อง
+      </button>
+
+      <button
+        id="captureButton"
+        class="primary"
+        onclick="captureAndAnalyze()"
+        disabled>
+        ถ่ายภาพและวิเคราะห์
+      </button>
+    </div>
+
+    <div id="cameraHelp" class="camera-help">
+      เมื่อเปิดกล้อง ระบบจะเฉลี่ยผลหลายเฟรมเพื่อลดการกระพริบของคำตอบ
+      พร้อมแสดงระดับ Confidence แบบ Real Time และสามารถสลับกล้องหน้า/หลังได้
+    </div>
+
+    <div class="location-panel">
+      <h3>📍 สถานที่จากภาพ</h3>
+
+      <p class="location-help">
+        โหมดอัปโหลดจะอ่าน GPS/EXIF จากไฟล์ภาพโดยอัตโนมัติ
+        ส่วนโหมดกล้อง Real Time จะใช้ตำแหน่งอุปกรณ์ขณะกดถ่าย เมื่อผู้ใช้อนุญาต
+      </p>
+
+      <div id="locationStatus" class="location-status">
+        ยังไม่ได้เลือกภาพ
+      </div>
+
+      <div id="manualFallback" style="display:none">
+        <p class="location-help" style="margin-top:12px">
+          ภาพนี้ไม่มีข้อมูล GPS/EXIF จึงไม่สามารถทราบสถานที่จริงจากภาพเมฆเพียงอย่างเดียว
+          หากทราบสถานที่ สามารถกรอกเองเป็นข้อมูลประกอบได้
+        </p>
+
+        <div class="location-manual">
+          <input
+            id="manualLocation"
+            type="text"
+            placeholder="เช่น อำเภอแม่ริม จังหวัดเชียงใหม่"
+            maxlength="120"
+          >
+          <button class="secondary" onclick="useManualLocation()">
+            ใช้สถานที่นี้
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card result-card">
+
+
+
+    <div id="placeholder" class="placeholder">
+
+      <div>
+
+        <div class="icon">☁️</div>
+
+        <h3>ผลวิเคราะห์จะแสดงที่นี่</h3>
+
+        <p>เลือกอัปโหลดรูป หรือเปิดกล้อง Real Time เพื่อเริ่มวิเคราะห์</p>
+
+      </div>
+
+    </div>
+
+
+
+    <div id="result" style="display:none">
+
+
+
+      <div id="lowConfidenceBox" class="low-confidence">
+
+        AI ยังมีความมั่นใจไม่สูง แนะนำให้ลองภาพอื่นที่เห็นลักษณะเมฆชัดเจนขึ้น
+
+      </div>
+
+      <div id="unknownBox" class="unknown-box">
+        <strong>❔ AI ยังไม่สามารถระบุชนิดเมฆได้อย่างมั่นใจ</strong><br>
+        ระบบจะแสดง Top 3 เพื่อใช้ประกอบการพิจารณา แต่จะไม่ฟันธงชนิดเมฆจากภาพนี้
+      </div>
+
+
+
+      <div class="result-top">
+
+        <span id="confidenceBadge" class="badge"></span>
+
+      </div>
+
+
+
+      <div class="cloud-title">
+
+        <div id="cloudIcon" class="cloud-icon">☁️</div>
+
+        <div>
+
+          <h2>
+
+            <span id="cloudName"></span>
+
+            <span id="cloudCode" class="cloud-code"></span>
+
+          </h2>
+
+          <p id="cloudThai"></p>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="info-grid">
+
+
+
+        <div class="info full location-result">
+
+          <h3>📍 สถานที่จากภาพ</h3>
+          <p id="resultLocation">ยังไม่ได้ตรวจข้อมูลสถานที่</p>
+
+          <div id="resultLocationSource" class="location-source"></div>
+
+        </div>
+
+
+
+        <div class="info">
+
+          <h3>☁ ระดับของเมฆ</h3>
+
+          <p id="cloudLevel"></p>
+
+        </div>
+
+
+
+        <div class="info">
+
+          <h3>🔍 ลักษณะเด่น</h3>
+
+          <p id="appearance"></p>
+
+        </div>
+
+
+
+        <div class="info full">
+
+          <h3>🌤 สภาพอากาศที่มักสัมพันธ์</h3>
+
+          <p id="weather"></p>
+
+        </div>
+
+
+
+        <div class="info full">
+
+          <h3>🌍 สภาพแวดล้อมโดยรอบที่มักพบ</h3>
+
+          <p id="environment"></p>
+
+        </div>
+
+
+
+        <div class="info full">
+
+          <h3>⏱ สิ่งที่อาจเกิดขึ้นต่อไป</h3>
+
+          <p id="nextWeather"></p>
+
+        </div>
+
+
+
+        <div class="info full">
+
+          <h3>🌱 สิ่งที่อาจเกิดใกล้พื้นดิน</h3>
+
+          <p id="ground"></p>
+
+        </div>
+
+
+
+        <div id="warningBox" class="info full warning">
+
+          <h3>⚠️ การเฝ้าสังเกต</h3>
+
+          <p id="warning"></p>
+
+        </div>
+
+
+
+      </div>
+
+
+
+      <div class="predictions">
+
+        <strong>Top 3 Predictions</strong>
+
+        <div id="predictionList"></div>
+
+      </div>
+
+
+
+      <div class="note">
+
+        CloudLens AI จำแนกจากลักษณะในภาพเพียงอย่างเดียว
+
+        ข้อมูลสภาพแวดล้อมเป็นความรู้ทั่วไปที่เชื่อมกับชนิดเมฆ
+
+        ไม่ใช่การพยากรณ์อากาศเฉพาะจุดแบบเรียลไทม์
+
+        และภาพหนึ่งภาพอาจมีเมฆมากกว่าหนึ่งชนิด
+
+      </div>
+
+
+
+      <div class="result-actions">
+
+        <button class="primary" onclick="saveCurrentResult()">บันทึกลง My Sky Log</button>
+
+        <button class="secondary" onclick="exportResultCard()">💾 บันทึกผลเป็นรูป PNG</button>
+
+
+        <button class="secondary" onclick="chooseImage()">วิเคราะห์ภาพใหม่</button>
+
+      </div>
+
+
+
+    </div>
+
+
+
+  </div>
+
+
+
+</section>
+
+
+
+
+
+<section id="journal" class="section-block">
+
+  <div class="section-heading">
+
+    <h2>My Sky Log</h2>
+
+    <p>
+
+      บันทึกผลการวิเคราะห์บนอุปกรณ์เครื่องนี้ พร้อมชนิดเมฆ Confidence วันเวลา และสถานที่ที่ระบุ
+
+    </p>
+
+  </div>
+
+
+
+  <div class="card">
+
+    <div class="journal-toolbar">
+
+      <div id="journalCount" class="journal-count">ยังไม่มีรายการ</div>
+
+      <button class="secondary" onclick="clearJournal()">ล้างประวัติ</button>
+
+    </div>
+
+
+
+    <div id="journalGrid" class="journal-grid"></div>
+
+  </div>
+
+</section>
+
+
+
+
+
+
+<div id="toast" class="toast"></div>
+
+
+
+<footer>
+
+  CloudLens AI · Google Teachable Machine · Image Classification
+  <div style="margin-top:12px">
+    <button class="secondary" onclick="shareCloudLens()">📱 แชร์ลิงก์เว็บ</button>
+  </div>
+
+</footer>
+
+
+
+</div>
+
+
+
+<script>
+
+
+
+/* =========================================================
+
+   1) TEACHABLE MACHINE MODEL
+
+   ========================================================= */
+
+
+
+const MODEL_URL =
+
+  "https://teachablemachine.withgoogle.com/models/X1suyf9fp/";
+
+
+
+const CONFIDENCE_THRESHOLD = 0.60;
+const UNKNOWN_THRESHOLD = 0.45;
+
+
+
+let model = null;
+let selectedImage = null;
+let currentResult = null;
+let locationDetectionPromise = null;
+
+let inputMode = "upload";
+let cameraStream = null;
+let cameraActive = false;
+let livePredictionRunning = false;
+let livePredictionBusy = false;
+let livePredictionTimer = null;
+
+let currentFacingMode = "environment";
+
+const SMOOTHING_WINDOW = 7;
+let livePredictionHistory = [];
+
+
+
+let currentLocation = {
+
+  source: "none",
+
+  label: "",
+
+  latitude: null,
+
+  longitude: null,
+
+  accuracy: null
+
+};
+
+
+
+
+
+/* =========================================================
+
+   2) CLOUD KNOWLEDGE DATABASE
+
+   ========================================================= */
+
+
+
+const cloudData = {
+
+
+
+  Cirrus: {
+
+    code: "Ci",
+
+    thai: "เมฆซีร์รัส",
+
+    icon: "〰️",
+
+    level: "เมฆระดับสูง",
+
+    appearance:
+
+      "เป็นริ้วหรือเส้นใยสีขาวบาง คล้ายขนนกหรือหางม้า เกิดจากผลึกน้ำแข็งเป็นหลัก",
+
+    weather:
+
+      "โดยทั่วไปไม่ทำให้เกิดฝนถึงพื้นโดยตรง แต่อาจพบก่อนช่วงที่ระบบอากาศกำลังเปลี่ยนแปลง",
+
+    environment:
+
+      "บริเวณพื้นมักยังมีแสงแดดและทัศนวิสัยค่อนข้างดี เพราะเมฆบางและอยู่สูง",
+
+    next:
+
+      "หาก Cirrus เพิ่มจำนวน หนาขึ้น และแผ่กว้าง อาจสัมพันธ์กับระบบอากาศที่กำลังเปลี่ยน",
+
+    ground:
+
+      "โดยทั่วไปไม่มีฝนจากเมฆชนิดนี้ลงถึงพื้นโดยตรง",
+
+    warning:
+
+      "เฝ้าสังเกตระดับต่ำ ใช้เป็นเบาะแสว่าท้องฟ้าอาจมีการเปลี่ยนแปลงในเวลาต่อมา"
+
+  },
+
+
+
+  Cirrocumulus: {
+
+    code: "Cc",
+
+    thai: "เมฆซีร์โรคิวมูลัส",
+
+    icon: "⋰",
+
+    level: "เมฆระดับสูง",
+
+    appearance:
+
+      "เป็นกลุ่มเมฆเล็กสีขาวจำนวนมาก เรียงเป็นระลอกหรือคล้ายเกล็ดปลา",
+
+    weather:
+
+      "มักไม่ทำให้เกิดฝนถึงพื้น และมักพบในสภาพอากาศที่ยังไม่รุนแรง",
+
+    environment:
+
+      "ท้องฟ้ามักยังสว่างและบริเวณพื้นดินอาจยังแห้ง เพราะเมฆอยู่ในระดับสูง",
+
+    next:
+
+      "หากมีเมฆระดับสูงชนิดอื่นเพิ่มขึ้นร่วมด้วย ควรสังเกตการเปลี่ยนแปลงของท้องฟ้าต่อ",
+
+    ground:
+
+      "หยาดน้ำที่เกิดในระดับสูงมักระเหยก่อนถึงพื้น",
+
+    warning:
+
+      "เฝ้าสังเกตระดับต่ำ โดยทั่วไปยังไม่มีสัญญาณอันตรายเด่นชัด"
+
+  },
+
+
+
+  Cirrostratus: {
+
+    code: "Cs",
+
+    thai: "เมฆซีร์โรสเตรตัส",
+
+    icon: "◌",
+
+    level: "เมฆระดับสูง",
+
+    appearance:
+
+      "เป็นม่านเมฆสีขาวโปร่งคลุมท้องฟ้ากว้าง บางครั้งทำให้เกิดวงแหวนฮาโลรอบดวงอาทิตย์หรือดวงจันทร์",
+
+    weather:
+
+      "ตัวเมฆเองมักไม่ทำให้เกิดฝนถึงพื้น แต่อาจสัมพันธ์กับระบบอากาศที่กำลังเคลื่อนเข้ามา",
+
+    environment:
+
+      "แสงอาทิตย์ยังผ่านลงมาได้แต่ดูฟุ้งหรือมัว บริเวณพื้นอาจยังไม่มีฝน",
+
+    next:
+
+      "หากชั้นเมฆหนาขึ้นและระดับเมฆค่อย ๆ ต่ำลง อาจนำไปสู่ท้องฟ้าครึ้มมากขึ้น",
+
+    ground:
+
+      "ในช่วงที่ยังเป็น Cirrostratus ล้วน ๆ มักไม่มีฝนจากเมฆชนิดนี้ถึงพื้น",
+
+    warning:
+
+      "เฝ้าสังเกตระดับต่ำถึงปานกลาง โดยเฉพาะเมื่อเมฆแผ่กว้างต่อเนื่อง"
+
+  },
+
+
+
+  Altocumulus: {
+
+    code: "Ac",
+
+    thai: "เมฆอัลโตคิวมูลัส",
+
+    icon: "⌇",
+
+    level: "เมฆระดับกลาง",
+
+    appearance:
+
+      "เป็นก้อนหรือแผ่นเมฆสีขาวถึงเทา มีเงาในตัว และก้อนมีขนาดใหญ่กว่า Cirrocumulus",
+
+    weather:
+
+      "โดยทั่วไปไม่ทำให้เกิดฝนหนักถึงพื้น แต่บางลักษณะอาจสัมพันธ์กับบรรยากาศที่เริ่มไม่เสถียร",
+
+    environment:
+
+      "บริเวณพื้นอาจมีแดดสลับเมฆ และความสว่างเปลี่ยนเป็นช่วง ๆ",
+
+    next:
+
+      "หากเมฆเริ่มพัฒนาในแนวดิ่งหรือหนาแน่นขึ้น อาจเป็นสัญญาณว่าบรรยากาศเริ่มไม่เสถียรมากขึ้น",
+
+    ground:
+
+      "ส่วนใหญ่ยังไม่มีผลกระทบเด่นชัดต่อพื้นดิน อาจมีฝนเบาหรือไม่มีก็ได้",
+
+    warning:
+
+      "เฝ้าสังเกตระดับต่ำถึงปานกลาง โดยเฉพาะเมื่อเมฆเริ่มพัฒนาในแนวดิ่ง"
+
+  },
+
+
+
+  Altostratus: {
+
+    code: "As",
+
+    thai: "เมฆอัลโตสเตรตัส",
+
+    icon: "═",
+
+    level: "เมฆระดับกลาง",
+
+    appearance:
+
+      "เป็นชั้นเมฆสีเทาหรือฟ้าเทาปกคลุมท้องฟ้าบริเวณกว้าง ดวงอาทิตย์อาจเห็นเป็นดวงมัว ๆ",
+
+    weather:
+
+      "มักสัมพันธ์กับท้องฟ้าที่กำลังเปลี่ยนไปสู่สภาพครึ้มมากขึ้น และอาจพัฒนาเป็นเมฆฝนต่อเนื่อง",
+
+    environment:
+
+      "บรรยากาศมักดูครึ้ม แสงแดดลดลง และเงาบนพื้นอ่อนลงหรือหายไป",
+
+    next:
+
+      "หากชั้นเมฆหนาขึ้นและฐานต่ำลง อาจพัฒนาไปสู่ Nimbostratus",
+
+    ground:
+
+      "อาจเริ่มมีหยาดน้ำบางส่วน แต่ไม่ได้หมายความว่าจะมีฝนถึงพื้นทุกครั้ง",
+
+    warning:
+
+      "เฝ้าสังเกตระดับปานกลาง เนื่องจากท้องฟ้าเริ่มมีการเปลี่ยนแปลงชัดเจนขึ้น"
+
+  },
+
+
+
+  Nimbostratus: {
+
+    code: "Ns",
+
+    thai: "เมฆนิมโบสเตรตัส",
+
+    icon: "🌧️",
+
+    level: "เมฆระดับกลางที่มักแผ่ลงสู่ระดับต่ำ",
+
+    appearance:
+
+      "เป็นชั้นเมฆสีเทาเข้มหรือมืด หนา และปกคลุมท้องฟ้ากว้าง",
+
+    weather:
+
+      "มักสัมพันธ์กับฝนต่อเนื่องที่ตกกินเวลานาน มากกว่าฝนหนักฉับพลันในช่วงสั้น",
+
+    environment:
+
+      "ท้องฟ้ามืดครึ้ม ความชื้นสูงขึ้น อาจมีฝนต่อเนื่อง และทัศนวิสัยลดลง",
+
+    next:
+
+      "ฝนอาจดำเนินต่อเนื่องเป็นเวลาค่อนข้างนานจนกว่าระบบอากาศจะเคลื่อนผ่าน",
+
+    ground:
+
+      "พื้นถนนอาจเปียก มีน้ำขัง พื้นลื่น และพื้นที่ระบายน้ำไม่ดีอาจมีน้ำสะสม",
+
+    warning:
+
+      "เฝ้าสังเกตระดับปานกลาง ระวังพื้นลื่น ทัศนวิสัยลดลง และน้ำสะสม"
+
+  },
+
+
+
+  Stratocumulus: {
+
+    code: "Sc",
+
+    thai: "เมฆสเตรโตคิวมูลัส",
+
+    icon: "▱",
+
+    level: "เมฆระดับต่ำ",
+
+    appearance:
+
+      "เป็นก้อนหรือม้วนขนาดใหญ่รวมตัวกันเป็นชั้น มีส่วนสว่างและเงาสลับกัน",
+
+    weather:
+
+      "ส่วนใหญ่มักไม่ทำให้เกิดฝนหนัก อาจมีฝนเบาหรือไม่มีฝนเลย",
+
+    environment:
+
+      "ท้องฟ้าอาจครึ้มเป็นช่วง ๆ แสงแดดอาจลอดผ่านช่องเมฆ และอากาศใกล้พื้นอาจเย็นลงเล็กน้อย",
+
+    next:
+
+      "เมฆอาจแตกออกเป็นช่องฟ้ามากขึ้น หรือหนาขึ้นตามการเปลี่ยนแปลงของสภาพอากาศ",
+
+    ground:
+
+      "โดยทั่วไปมีผลกระทบต่อพื้นน้อย อาจมีเพียงความชื้นเพิ่มขึ้นหรือฝนเบา",
+
+    warning:
+
+      "เฝ้าสังเกตระดับต่ำ โดยทั่วไปไม่ใช่เมฆที่สัมพันธ์กับสภาพอากาศรุนแรง"
+
+  },
+
+
+
+  Stratus: {
+
+    code: "St",
+
+    thai: "เมฆสเตรตัส",
+
+    icon: "━",
+
+    level: "เมฆระดับต่ำ",
+
+    appearance:
+
+      "เป็นชั้นเมฆสีเทาเรียบ ค่อนข้างสม่ำเสมอ และอยู่ต่ำ คล้ายหมอกที่ยกตัวขึ้น",
+
+    weather:
+
+      "มักสัมพันธ์กับอากาศชื้นและครึ้ม และอาจมีฝนละอองมากกว่าฝนหนัก",
+
+    environment:
+
+      "อากาศมักดูชื้น หม่น และหากฐานต่ำมากอาจมีหมอกหรือเมฆเกาะพื้นที่สูง",
+
+    next:
+
+      "ถ้าเมฆแตกตัว ท้องฟ้าอาจเปิดขึ้น แต่ถ้าหนาขึ้นอาจทำให้บรรยากาศครึ้มต่อเนื่อง",
+
+    ground:
+
+      "อาจมีฝนละออง ถนนชื้น พื้นลื่น และทัศนวิสัยลดลง",
+
+    warning:
+
+      "เฝ้าสังเกตระดับต่ำถึงปานกลาง โดยเฉพาะพื้นที่ภูเขา พื้นที่ชื้น และเส้นทางคมนาคม"
+
+  },
+
+
+
+  Cumulus: {
+
+    code: "Cu",
+
+    thai: "เมฆคิวมูลัส",
+
+    icon: "☁️",
+
+    level: "ฐานระดับต่ำและสามารถพัฒนาในแนวดิ่ง",
+
+    appearance:
+
+      "เป็นก้อนปุยสีขาว ขอบคม ฐานค่อนข้างราบ และยอดคล้ายดอกกะหล่ำ",
+
+    weather:
+
+      "ถ้าเป็นก้อนเล็กมักสัมพันธ์กับอากาศค่อนข้างดี แต่ถ้าโตในแนวดิ่งอาจให้ฝนเป็นห้วง",
+
+    environment:
+
+      "มักมีแดดสลับเงาเมฆ หากก้อนยังเล็กสภาพอากาศโดยรอบมักค่อนข้างดี",
+
+    next:
+
+      "หากเมฆโตในแนวดิ่งอย่างรวดเร็วและฐานมืดลง อาจเกิดฝนเฉพาะจุดหรือพัฒนาต่อเป็น Cumulonimbus",
+
+    ground:
+
+      "ถ้าเป็นก้อนเล็ก พื้นบริเวณนั้นมักยังแห้ง แต่ก้อนใหญ่สามารถทำให้เกิดฝนเฉพาะจุดได้",
+
+    warning:
+
+      "เฝ้าสังเกตระดับต่ำ และเพิ่มขึ้นเมื่อเมฆพัฒนาในแนวดิ่งอย่างชัดเจน"
+
+  },
+
+
+
+  Cumulonimbus: {
+
+    code: "Cb",
+
+    thai: "เมฆคิวมูโลนิมบัส",
+
+    icon: "⛈️",
+
+    level: "เมฆก่อตัวในแนวดิ่ง ฐานระดับต่ำ แต่ยอดสามารถขึ้นได้ถึงระดับสูง",
+
+    appearance:
+
+      "เป็นเมฆขนาดใหญ่มาก พัฒนาเป็นหอคอย ฐานมืด และยอดอาจแผ่ออกคล้ายรูปทั่ง",
+
+    weather:
+
+      "มักสัมพันธ์กับฝนหนัก พายุฝนฟ้าคะนอง ฟ้าแลบ ฟ้าร้อง ลมกระโชก และบางครั้งอาจมีลูกเห็บ",
+
+    environment:
+
+      "ท้องฟ้าอาจมืดลงอย่างรวดเร็ว ลมอาจแรงหรือเปลี่ยนทิศ อุณหภูมิอาจลดลง และทัศนวิสัยลดลงเมื่อมีฝนหนัก",
+
+    next:
+
+      "อาจเกิดหรือกำลังเกิดพายุฝนฟ้าคะนอง ฝนหนัก ลมกระโชก ฟ้าผ่า และบางกรณีลูกเห็บ",
+
+    ground:
+
+      "อาจเกิดน้ำขังฉับพลัน วัตถุหรือกิ่งไม้ปลิวจากลมแรง และมีความเสี่ยงจากฟ้าผ่า",
+
+    warning:
+
+      "เฝ้าระวังสูง หากได้ยินฟ้าร้องควรหลีกเลี่ยงพื้นที่โล่ง แหล่งน้ำ และกิจกรรมกลางแจ้ง"
+
+  }
+
+};
+
+
+
+
+
+/* =========================================================
+
+   3) CLASS MAPPING
+
+   รองรับชื่อเต็มและรหัสย่อ
+
+   ========================================================= */
+
+
+
+const classMap = {
+
+  ci: "Cirrus",
+
+  cirrus: "Cirrus",
+
+
+
+  cc: "Cirrocumulus",
+
+  cirrocumulus: "Cirrocumulus",
+
+
+
+  cs: "Cirrostratus",
+
+  cirrostratus: "Cirrostratus",
+
+
+
+  ac: "Altocumulus",
+
+  altocumulus: "Altocumulus",
+
+
+
+  as: "Altostratus",
+
+  altostratus: "Altostratus",
+
+
+
+  ns: "Nimbostratus",
+
+  nimbostratus: "Nimbostratus",
+
+
+
+  sc: "Stratocumulus",
+
+  stratocumulus: "Stratocumulus",
+
+
+
+  st: "Stratus",
+
+  stratus: "Stratus",
+
+
+
+  cu: "Cumulus",
+
+  cumulus: "Cumulus",
+
+
+
+  cb: "Cumulonimbus",
+
+  cumulonimbus: "Cumulonimbus"
+
+};
+
+
+
+function normalizeCloudLabel(label){
+
+  return String(label || "")
+
+    .trim()
+
+    .toLowerCase()
+
+    .replace(/[^a-z]/g,"");
+
+}
+
+
+
+function getCloudKey(label){
+
+  return classMap[normalizeCloudLabel(label)] || null;
+
+}
+
+
+
+
+
+/* =========================================================
+
+   4) LOAD MODEL
+
+   ========================================================= */
+
+
+
+async function loadModel(){
+
+
+
+  const status = document.getElementById("modelStatus");
+
+  const statusText = document.getElementById("modelStatusText");
+
+
+
+  try{
+
+
+
+    status.className = "model-status";
+
+    statusText.textContent = "กำลังโหลด AI Model...";
+
+
+
+    model = await tmImage.load(
+
+      MODEL_URL + "model.json",
+
+      MODEL_URL + "metadata.json"
+
+    );
+
+
+
+    const labels = model.getClassLabels();
+
+
+
+    console.log("CloudLens Model loaded");
+
+    console.log("Classes:", labels);
+
+
+
+    status.className = "model-status ready";
+
+    statusText.textContent =
+
+      `AI Model พร้อมใช้งาน · ${model.getTotalClasses()} Classes`;
+
+
+
+    updateAnalyzeButton();
+
+    if(cameraActive){
+      startLivePrediction();
+    }
+
+
+
+  }catch(error){
+
+
+
+    console.error("Model loading error:", error);
+
+
+
+    model = null;
+
+
+
+    status.className = "model-status error";
+
+    statusText.textContent = "โหลด AI Model ไม่สำเร็จ";
+
+
+
+    document.getElementById("placeholder").innerHTML = `
+
+      <div>
+
+        <div class="icon">⚠️</div>
+
+        <h3>ไม่สามารถโหลดโมเดลได้</h3>
+
+        <p>ตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้าเว็บอีกครั้ง</p>
+
+      </div>
+
+    `;
+
+
+
+  }
+
+}
+
+
+
+
+
+/* =========================================================
+   5) IMAGE INPUT + REAL-TIME CAMERA
+   ========================================================= */
+
+function resetAnalysisView(){
+  document.getElementById("result").style.display = "none";
+  document.getElementById("placeholder").style.display = "grid";
+  currentResult = null;
+}
+
+
+function setInputMode(mode){
+
+  inputMode = mode;
+
+  const uploadBtn = document.getElementById("uploadModeButton");
+  const cameraBtn = document.getElementById("cameraModeButton");
+  const uploadActions = document.getElementById("uploadActions");
+  const cameraActions = document.getElementById("cameraActions");
+  const cameraHelp = document.getElementById("cameraHelp");
+  const title = document.getElementById("inputTitle");
+  const description = document.getElementById("inputDescription");
+  const selectButton = document.getElementById("mainSelectButton");
+
+  if(mode === "camera"){
+
+    uploadBtn.classList.remove("active");
+    cameraBtn.classList.add("active");
+
+    uploadActions.style.display = "none";
+    cameraActions.style.display = "flex";
+    cameraHelp.classList.add("show");
+
+    title.textContent = "กล้อง Real Time";
+    description.textContent =
+      "เปิดกล้องเพื่อดูการจำแนกเมฆแบบสด แล้วกดถ่ายภาพเพื่อวิเคราะห์รายละเอียด";
+
+    selectButton.textContent = "เปิดกล้อง";
+    selectButton.onclick = startCamera;
+
+    selectedImage = null;
+    updateAnalyzeButton();
+
+    document.getElementById("preview").style.display = "none";
+
+    clearLocation(false);
+    setLocationStatus(
+      "โหมดกล้อง: ตำแหน่งจะตรวจเมื่อกดถ่ายภาพ"
+    );
+
+    resetAnalysisView();
+
+  }else{
+
+    uploadBtn.classList.add("active");
+    cameraBtn.classList.remove("active");
+
+    uploadActions.style.display = "flex";
+    cameraActions.style.display = "none";
+    cameraHelp.classList.remove("show");
+
+    title.textContent = "เลือกภาพเมฆ";
+    description.textContent =
+      "เลือกภาพจากเครื่อง ควรให้รูปทรงเมฆเห็นชัด และให้ท้องฟ้าเป็นส่วนหลักของภาพ";
+
+    selectButton.textContent = "เลือกภาพจากเครื่อง";
+    selectButton.onclick = chooseImage;
+
+    stopCamera();
+
+    document.getElementById("cameraVideo").style.display = "none";
+    document.getElementById("cameraLiveBadge").classList.remove("show");
+    document.getElementById("uploadEmpty").style.display = "block";
+
+    resetAnalysisView();
+  }
+}
+
+
+function chooseImage(){
+
+  if(inputMode !== "upload"){
+    setInputMode("upload");
+  }
+
+  stopCamera();
+  document.getElementById("imageInput").click();
+}
+
+
+document
+  .getElementById("imageInput")
+  .addEventListener("change",function(){
+
+    const file = this.files[0];
+
+    if(!file) return;
+
+    if(!file.type.startsWith("image/")){
+      alert("กรุณาเลือกไฟล์รูปภาพ");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = event => {
+
+      selectedImage = event.target.result;
+
+      clearLocation(false);
+
+      const preview = document.getElementById("preview");
+
+      preview.onload = () => {
+        updateAnalyzeButton();
+      };
+
+      preview.src = selectedImage;
+      preview.style.display = "block";
+
+      document.getElementById("cameraVideo").style.display = "none";
+      document.getElementById("uploadEmpty").style.display = "none";
+
+      resetAnalysisView();
+
+      locationDetectionPromise =
+        detectLocationFromImage(file);
+    };
+
+    reader.readAsDataURL(file);
+  });
+
+
+function updateAnalyzeButton(){
+
+  document.getElementById("analyzeButton").disabled =
+    !(model && selectedImage);
+}
+
+
+/* ---------- REAL-TIME CAMERA ---------- */
+
+
+function getConfidenceLevel(probability){
+
+  if(probability >= 0.85){
+    return {
+      label:"ความมั่นใจสูง",
+      shortLabel:"สูง",
+      className:"high"
+    };
+  }
+
+  if(probability >= 0.60){
+    return {
+      label:"ความมั่นใจปานกลาง",
+      shortLabel:"ปานกลาง",
+      className:"medium"
+    };
+  }
+
+  return {
+    label:"ความมั่นใจต่ำ",
+    shortLabel:"ต่ำ",
+    className:"low"
+  };
+}
+
+
+function resetLivePredictionSmoothing(){
+  livePredictionHistory = [];
+}
+
+
+function smoothLivePredictions(predictions){
+
+  const frame = {};
+
+  predictions.forEach(item => {
+    frame[item.className] = item.probability;
+  });
+
+  livePredictionHistory.push(frame);
+
+  if(livePredictionHistory.length > SMOOTHING_WINDOW){
+    livePredictionHistory.shift();
+  }
+
+  const labels =
+    [...new Set(
+      livePredictionHistory.flatMap(
+        item => Object.keys(item)
+      )
+    )];
+
+  const smoothed = labels.map(label => {
+
+    const average =
+      livePredictionHistory.reduce(
+        (sum, item) =>
+          sum + (item[label] || 0),
+        0
+      ) / livePredictionHistory.length;
+
+    return {
+      className: label,
+      probability: average
+    };
+  });
+
+  return smoothed.sort(
+    (a,b) =>
+      b.probability -
+      a.probability
+  );
+}
+
+
+async function switchCamera(){
+
+  currentFacingMode =
+    currentFacingMode === "environment"
+      ? "user"
+      : "environment";
+
+  resetLivePredictionSmoothing();
+
+  const modeText =
+    currentFacingMode === "environment"
+      ? "กล้องหลัง"
+      : "กล้องหน้า";
+
+  if(cameraActive){
+    showToast("กำลังสลับเป็น " + modeText);
+    await startCamera();
+  }else{
+    showToast("เลือก " + modeText + " แล้ว");
+  }
+}
+
+
+async function startCamera(){
+
+  if(inputMode !== "camera"){
+    setInputMode("camera");
+  }
+
+  if(
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ){
+    alert(
+      "เบราว์เซอร์นี้ไม่รองรับกล้อง Real Time\n" +
+      "กรุณาใช้ Chrome / Edge / Safari รุ่นใหม่"
+    );
+    return;
+  }
+
+  const startButton =
+    document.getElementById("startCameraButton");
+
+  const captureButton =
+    document.getElementById("captureButton");
+
+  const video =
+    document.getElementById("cameraVideo");
+
+  const badge =
+    document.getElementById("cameraLiveBadge");
+
+  startButton.disabled = true;
+  startButton.textContent = "กำลังเปิดกล้อง...";
+
+  try{
+
+    stopCamera();
+    resetLivePredictionSmoothing();
+
+    cameraStream =
+      await navigator.mediaDevices.getUserMedia({
+        video:{
+          facingMode:{ideal:currentFacingMode},
+          width:{ideal:1280},
+          height:{ideal:720}
+        },
+        audio:false
+      });
+
+    video.srcObject = cameraStream;
+    await video.play();
+
+    cameraActive = true;
+
+    document.getElementById("uploadEmpty").style.display = "none";
+    document.getElementById("preview").style.display = "none";
+
+    video.style.display = "block";
+    badge.classList.add("show");
+
+    document.getElementById("livePredictionText").textContent =
+      "กำลังเริ่ม AI Real Time...";
+
+    captureButton.disabled = false;
+    startButton.textContent = "เปิดกล้องใหม่";
+
+    clearLocation(false);
+    setLocationStatus(
+      "กล้องพร้อมใช้งาน · ตำแหน่งจะตรวจเมื่อกดถ่ายภาพ"
+    );
+
+    startLivePrediction();
+
+  }catch(error){
+
+    console.error("Camera error:",error);
+
+    cameraActive = false;
+    captureButton.disabled = true;
+
+    let message = "ไม่สามารถเปิดกล้องได้";
+
+    if(error.name === "NotAllowedError"){
+      message =
+        "ไม่ได้รับอนุญาตให้ใช้กล้อง กรุณาอนุญาต Camera ในเบราว์เซอร์";
+    }else if(error.name === "NotFoundError"){
+      message = "ไม่พบกล้องบนอุปกรณ์นี้";
+    }else if(
+      location.protocol !== "https:" &&
+      location.hostname !== "localhost"
+    ){
+      message +=
+        "\nกล้องบนเว็บควรเปิดผ่าน HTTPS หรือ localhost";
+    }
+
+    alert(message);
+
+  }finally{
+
+    startButton.disabled = false;
+
+    if(!cameraActive){
+      startButton.textContent = "เปิดกล้อง";
+    }
+  }
+}
+
+
+function stopCamera(){
+
+  stopLivePrediction();
+  resetLivePredictionSmoothing();
+
+  if(cameraStream){
+    cameraStream.getTracks().forEach(track => track.stop());
+    cameraStream = null;
+  }
+
+  cameraActive = false;
+
+  const video = document.getElementById("cameraVideo");
+
+  if(video){
+    video.srcObject = null;
+  }
+
+  const captureButton = document.getElementById("captureButton");
+
+  if(captureButton){
+    captureButton.disabled = true;
+  }
+}
+
+
+function startLivePrediction(){
+
+  if(!cameraActive) return;
+
+  livePredictionRunning = true;
+
+  if(!model){
+    document.getElementById("livePredictionText").textContent =
+      "รอ AI Model พร้อมใช้งาน...";
+  }
+
+  scheduleLivePrediction(100);
+}
+
+
+function stopLivePrediction(){
+
+  livePredictionRunning = false;
+  livePredictionBusy = false;
+
+  if(livePredictionTimer){
+    clearTimeout(livePredictionTimer);
+    livePredictionTimer = null;
+  }
+}
+
+
+function scheduleLivePrediction(delay = 650){
+
+  if(!livePredictionRunning) return;
+
+  if(livePredictionTimer){
+    clearTimeout(livePredictionTimer);
+  }
+
+  livePredictionTimer =
+    setTimeout(runLivePrediction,delay);
+}
+
+
+async function runLivePrediction(){
+
+  if(
+    !livePredictionRunning ||
+    !cameraActive ||
+    livePredictionBusy
+  ){
+    return;
+  }
+
+  if(!model){
+    scheduleLivePrediction(700);
+    return;
+  }
+
+  const video =
+    document.getElementById("cameraVideo");
+
+  if(!video || video.readyState < 2){
+    scheduleLivePrediction(400);
+    return;
+  }
+
+  livePredictionBusy = true;
+
+  try{
+
+    let predictions =
+      await model.predict(video,false);
+
+    predictions =
+      [...predictions].sort(
+        (a,b) =>
+          b.probability -
+          a.probability
+      );
+
+    const smoothed =
+      smoothLivePredictions(predictions);
+
+    if(smoothed.length){
+
+      const best =
+        smoothed[0];
+
+      const mapped =
+        getCloudKey(best.className) ||
+        best.className;
+
+      const percent =
+        best.probability * 100;
+
+      const confidence =
+        getConfidenceLevel(
+          best.probability
+        );
+
+      const frameText =
+        livePredictionHistory.length < 3
+          ? `กำลังปรับผล ${livePredictionHistory.length}/${SMOOTHING_WINDOW}`
+          : `เฉลี่ย ${livePredictionHistory.length} เฟรม`;
+
+      const liveLabel =
+        best.probability < UNKNOWN_THRESHOLD
+          ? `Not Sure · ${percent.toFixed(1)}%`
+          : `${mapped} · ${percent.toFixed(1)}% · ${confidence.shortLabel}`;
+
+      document
+        .getElementById("livePredictionText")
+        .innerHTML =
+          liveLabel +
+          `<span class="live-subtext">${frameText}</span>`;
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Live prediction error:",
+      error
+    );
+
+  }finally{
+
+    livePredictionBusy = false;
+    scheduleLivePrediction(650);
+  }
+}
+
+async function captureAndAnalyze(){
+
+  if(!cameraActive){
+    await startCamera();
+
+    if(!cameraActive) return;
+  }
+
+  const button =
+    document.getElementById("captureButton");
+
+  const video =
+    document.getElementById("cameraVideo");
+
+  const canvas =
+    document.getElementById("captureCanvas");
+
+  if(
+    video.readyState < 2 ||
+    !video.videoWidth ||
+    !video.videoHeight
+  ){
+    alert("กล้องยังไม่พร้อม กรุณารอสักครู่");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "กำลังถ่ายและวิเคราะห์...";
+
+  try{
+
+    stopLivePrediction();
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(
+      video,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    selectedImage =
+      canvas.toDataURL("image/jpeg",0.92);
+
+    const preview =
+      document.getElementById("preview");
+
+    await new Promise(resolve => {
+      preview.onload = () => resolve();
+      preview.src = selectedImage;
+    });
+
+    locationDetectionPromise =
+      detectLocationForLiveCapture();
+
+    video.style.display = "none";
+    preview.style.display = "block";
+
+    document
+      .getElementById("cameraLiveBadge")
+      .classList.remove("show");
+
+    stopCamera();
+
+    resetAnalysisView();
+
+    await analyzeImage();
+
+  }catch(error){
+
+    console.error("Capture error:",error);
+
+    alert(
+      "ไม่สามารถถ่ายภาพจากกล้องได้: " +
+      error.message
+    );
+
+  }finally{
+
+    button.textContent = "ถ่ายภาพและวิเคราะห์";
+  }
+}
+
+
+window.addEventListener(
+  "beforeunload",
+  stopCamera
+);
+
+
+/* =========================================================
+   6) AUTO LOCATION FROM IMAGE EXIF/GPS
+   ========================================================= */
+
+function setLocationStatus(message, type = "") {
+  const box = document.getElementById("locationStatus");
+  box.className = "location-status" + (type ? " " + type : "");
+  box.textContent = message;
+}
+
+function formatCoordinate(value) {
+  return Number(value).toFixed(5);
+}
+
+function updateResultLocation() {
+  const place = document.getElementById("resultLocation");
+  const source = document.getElementById("resultLocationSource");
+
+  if (!place || !source) return;
+
+  if (currentLocation.source === "none") {
+    place.textContent = "ไม่พบข้อมูลสถานที่ในไฟล์ภาพ";
+    source.textContent = "ภาพอาจไม่มี GPS/EXIF หรือ metadata ถูกลบออก";
+    return;
+  }
+
+  place.textContent = currentLocation.label || "พบข้อมูลตำแหน่งในภาพ";
+
+  if (currentLocation.source === "image_exif") {
+    source.textContent =
+      "แหล่งข้อมูล: GPS/EXIF จากไฟล์ภาพ" +
+      (
+        currentLocation.latitude !== null &&
+        currentLocation.longitude !== null
+          ? ` · ${formatCoordinate(currentLocation.latitude)}, ${formatCoordinate(currentLocation.longitude)}`
+          : ""
+      );
+  } else if (currentLocation.source === "live_gps") {
+    source.textContent =
+      "แหล่งข้อมูล: GPS ของอุปกรณ์ขณะถ่ายแบบ Real Time" +
+      (
+        currentLocation.latitude !== null &&
+        currentLocation.longitude !== null
+          ? ` · ${formatCoordinate(currentLocation.latitude)}, ${formatCoordinate(currentLocation.longitude)}`
+          : ""
+      );
+  } else {
+    source.textContent = "แหล่งข้อมูล: ผู้ใช้ระบุเอง";
+  }
+}
+
+async function reverseGeocode(latitude, longitude) {
+  const url =
+    "https://api.bigdatacloud.net/data/reverse-geocode-client" +
+    `?latitude=${encodeURIComponent(latitude)}` +
+    `&longitude=${encodeURIComponent(longitude)}` +
+    "&localityLanguage=th";
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Reverse geocoding HTTP " + response.status);
+  }
+
+  const data = await response.json();
+
+  const candidates = [
+    data.locality,
+    data.city,
+    data.principalSubdivision,
+    data.countryName
+  ]
+  .filter(Boolean)
+  .map(item => String(item).trim())
+  .filter(Boolean);
+
+  const unique = [];
+  for (const item of candidates) {
+    if (!unique.includes(item)) unique.push(item);
+  }
+
+  return unique.join(", ");
+}
+
+async function detectLocationFromImage(file) {
+  const fallback = document.getElementById("manualFallback");
+
+  if (fallback) fallback.style.display = "none";
+
+  currentLocation = {
+    source: "none",
+    label: "",
+    latitude: null,
+    longitude: null,
+    accuracy: null
+  };
+
+  updateResultLocation();
+  setLocationStatus("⏳ กำลังตรวจ GPS/EXIF จากไฟล์ภาพ...");
+
+  try {
+    if (typeof exifr === "undefined") {
+      throw new Error("ไม่สามารถโหลดระบบอ่าน EXIF ได้");
+    }
+
+    const gps = await exifr.gps(file);
+
+    if (
+      !gps ||
+      !Number.isFinite(gps.latitude) ||
+      !Number.isFinite(gps.longitude)
+    ) {
+      setLocationStatus("ℹ️ ไม่พบข้อมูล GPS ในไฟล์ภาพนี้");
+
+      if (fallback) fallback.style.display = "block";
+
+      updateResultLocation();
+      return null;
+    }
+
+    const latitude = gps.latitude;
+    const longitude = gps.longitude;
+
+    let placeName = "";
+
+    try {
+      placeName = await reverseGeocode(latitude, longitude);
+    } catch (error) {
+      console.warn("Reverse geocoding failed:", error);
+    }
+
+    currentLocation = {
+      source: "image_exif",
+      label:
+        placeName ||
+        `พิกัด ${formatCoordinate(latitude)}, ${formatCoordinate(longitude)}`,
+      latitude,
+      longitude,
+      accuracy: null
+    };
+
+    setLocationStatus(
+      "✓ พบสถานที่จากภาพ: " + currentLocation.label,
+      "good"
+    );
+
+    updateResultLocation();
+    return currentLocation;
+
+  } catch (error) {
+    console.error("EXIF location error:", error);
+
+    setLocationStatus(
+      "ไม่สามารถอ่านข้อมูลสถานที่จากไฟล์ภาพนี้ได้",
+      "error"
+    );
+
+    if (fallback) fallback.style.display = "block";
+
+    updateResultLocation();
+    return null;
+  }
+}
+
+
+async function detectLocationForLiveCapture(){
+
+  const fallback =
+    document.getElementById("manualFallback");
+
+  if(fallback){
+    fallback.style.display = "none";
+  }
+
+  currentLocation = {
+    source:"none",
+    label:"",
+    latitude:null,
+    longitude:null,
+    accuracy:null
+  };
+
+  updateResultLocation();
+
+  if(!navigator.geolocation){
+
+    setLocationStatus(
+      "ℹ️ อุปกรณ์นี้ไม่รองรับ GPS กรุณาระบุสถานที่เอง"
+    );
+
+    if(fallback){
+      fallback.style.display = "block";
+    }
+
+    return null;
+  }
+
+  setLocationStatus(
+    "⏳ กำลังตรวจตำแหน่งขณะถ่ายภาพ..."
+  );
+
+  return new Promise(resolve => {
+
+    navigator.geolocation.getCurrentPosition(
+
+      async position => {
+
+        const latitude =
+          position.coords.latitude;
+
+        const longitude =
+          position.coords.longitude;
+
+        const accuracy =
+          position.coords.accuracy;
+
+        let placeName = "";
+
+        try{
+          placeName =
+            await reverseGeocode(
+              latitude,
+              longitude
+            );
+        }catch(error){
+          console.warn(
+            "Live reverse geocode failed:",
+            error
+          );
+        }
+
+        currentLocation = {
+          source:"live_gps",
+          label:
+            placeName ||
+            `พิกัด ${formatCoordinate(latitude)}, ${formatCoordinate(longitude)}`,
+          latitude,
+          longitude,
+          accuracy
+        };
+
+        setLocationStatus(
+          "✓ ตำแหน่งขณะถ่าย: " +
+          currentLocation.label,
+          "good"
+        );
+
+        updateResultLocation();
+        resolve(currentLocation);
+      },
+
+      error => {
+
+        console.warn("Live GPS error:",error);
+
+        let message =
+          "ℹ️ ไม่สามารถอ่านตำแหน่งขณะถ่ายได้";
+
+        if(error.code === 1){
+          message =
+            "ℹ️ ไม่ได้รับอนุญาต Location กรุณาระบุสถานที่เองหากต้องการ";
+        }
+
+        setLocationStatus(message);
+
+        if(fallback){
+          fallback.style.display = "block";
+        }
+
+        updateResultLocation();
+        resolve(null);
+      },
+
+      {
+        enableHighAccuracy:true,
+        timeout:10000,
+        maximumAge:0
+      }
+    );
+  });
+}
+
+
+function useManualLocation() {
+  const input = document.getElementById("manualLocation");
+  const value = input.value.trim();
+
+  if (!value) {
+    setLocationStatus("กรุณากรอกชื่อสถานที่ก่อน", "error");
+    return;
+  }
+
+  currentLocation = {
+    source: "manual",
+    label: value,
+    latitude: null,
+    longitude: null,
+    accuracy: null
+  };
+
+  setLocationStatus("✓ " + value + " · ระบุโดยผู้ใช้", "good");
+  updateResultLocation();
+}
+
+function clearLocation(showMessage = true) {
+  currentLocation = {
+    source: "none",
+    label: "",
+    latitude: null,
+    longitude: null,
+    accuracy: null
+  };
+
+  locationDetectionPromise = null;
+
+  const input = document.getElementById("manualLocation");
+  if (input) input.value = "";
+
+  const fallback = document.getElementById("manualFallback");
+  if (fallback) fallback.style.display = "none";
+
+  if (showMessage) {
+    setLocationStatus("ยังไม่ได้เลือกภาพ");
+  } else {
+    setLocationStatus("กำลังรอตรวจข้อมูลสถานที่จากภาพ...");
+  }
+
+  updateResultLocation();
+}
+
+/* =========================================================
+
+   6) PREDICT
+
+   ========================================================= */
+
+
+
+async function analyzeImage(){
+
+
+
+  if(!model || !selectedImage){
+
+    return;
+
+  }
+
+
+
+  const button = document.getElementById("analyzeButton");
+
+
+
+  button.disabled = true;
+
+  button.textContent = "AI กำลังวิเคราะห์...";
+
+
+
+  try{
+
+
+
+    let predictions = await model.predict(
+
+      document.getElementById("preview"),
+
+      false
+
+    );
+
+
+
+    predictions = [...predictions].sort(
+
+      (a,b) => b.probability - a.probability
+
+    );
+
+
+
+    console.table(
+
+      predictions.map(p => ({
+
+        Class: p.className,
+
+        Confidence: (p.probability * 100).toFixed(2) + "%"
+
+      }))
+
+    );
+
+
+
+    if(!predictions.length){
+
+      throw new Error("โมเดลไม่ส่งผลการทำนายกลับมา");
+
+    }
+
+
+
+    const best = predictions[0];
+
+    const cloudKey = getCloudKey(best.className);
+
+    // รอการอ่าน GPS/EXIF และการแปลงชื่อสถานที่ก่อนแสดงผล
+    if (locationDetectionPromise) {
+      try {
+        await locationDetectionPromise;
+      } catch (locationError) {
+        console.warn("Location detection did not complete:", locationError);
+      }
+    }
+
+
+
+    if(!cloudKey || !cloudData[cloudKey]){
+
+
+
+      alert(
+
+        "ชื่อ Class จากโมเดลยังไม่ตรงกับฐานข้อมูล\n\n" +
+
+        "Class ที่ AI ส่งมา: " + best.className + "\n\n" +
+
+        "กรุณาตรวจชื่อ Class ใน Teachable Machine"
+
+      );
+
+
+
+      return;
+
+    }
+
+
+
+    showCloudResult(
+
+      cloudKey,
+
+      best.probability,
+
+      predictions
+
+    );
+
+
+
+  }catch(error){
+
+
+
+    console.error("Prediction error:", error);
+
+    alert("เกิดข้อผิดพลาดขณะวิเคราะห์ภาพ: " + error.message);
+
+
+
+  }finally{
+
+
+
+    button.textContent = "วิเคราะห์เมฆ";
+
+    updateAnalyzeButton();
+
+
+
+  }
+
+}
+
+
+
+
+
+/* =========================================================
+
+   8) DISPLAY RESULT
+
+   ========================================================= */
+
+
+
+function showCloudResult(cloudKey, probability, predictions){
+
+  const data = cloudData[cloudKey];
+
+  const isUnknown =
+    probability < UNKNOWN_THRESHOLD;
+
+  currentResult = {
+    cloudKey,
+    rawCloudKey: cloudKey,
+    predictedClass:
+      isUnknown ? "Unknown" : cloudKey,
+    probability,
+    predictions,
+    isUnknown,
+    analyzedAt: new Date().toISOString()
+  };
+
+  document.getElementById("placeholder").style.display = "none";
+  document.getElementById("result").style.display = "block";
+
+  const confidence =
+    probability * 100;
+
+  const badge =
+    document.getElementById("confidenceBadge");
+
+  const lowBox =
+    document.getElementById("lowConfidenceBox");
+
+  const unknownBox =
+    document.getElementById("unknownBox");
+
+  const confidenceLevel =
+    getConfidenceLevel(probability);
+
+  badge.textContent =
+    `AI Confidence ${confidence.toFixed(1)}% · ${confidenceLevel.label}`;
+
+  badge.className =
+    `badge ${confidenceLevel.className}`;
+
+  if(isUnknown){
+
+    unknownBox.classList.add("show");
+    lowBox.style.display = "none";
+
+    document.getElementById("cloudIcon").textContent = "❔";
+    document.getElementById("cloudName").textContent = "Not Sure";
+    document.getElementById("cloudCode").textContent = "";
+    document.getElementById("cloudThai").textContent =
+      `ผู้สมัครอันดับ 1: ${data.thai} (${data.code})`;
+
+    document.getElementById("cloudLevel").textContent =
+      "ยังไม่ระบุ เนื่องจาก AI มีความมั่นใจต่ำกว่าเกณฑ์";
+
+    document.getElementById("appearance").textContent =
+      "ภาพนี้ยังไม่มีลักษณะที่ชัดเจนพอให้ระบบฟันธงชนิดเมฆ แนะนำให้ถ่ายใหม่โดยให้เมฆกินพื้นที่ภาพมากขึ้นและภาพไม่มืดหรือเบลอ";
+
+    document.getElementById("weather").textContent =
+      "ยังไม่ควรสรุปสภาพอากาศจากชนิดเมฆ เพราะการจำแนกภาพนี้ยังไม่แน่นอน";
+
+    document.getElementById("environment").textContent =
+      "ใช้ Top 3 Predictions เป็นข้อมูลประกอบเท่านั้น และควรถ่ายภาพใหม่เพื่อยืนยัน";
+
+    document.getElementById("nextWeather").textContent =
+      "ยังไม่สรุปจากภาพนี้";
+
+    document.getElementById("ground").textContent =
+      "ยังไม่สรุปจากภาพนี้";
+
+    document.getElementById("warning").textContent =
+      "ความมั่นใจต่ำกว่า 45% ระบบจึงแสดง Not Sure แทนการฟันธงชนิดเมฆ";
+
+  }else{
+
+    unknownBox.classList.remove("show");
+
+    if(probability < CONFIDENCE_THRESHOLD){
+      lowBox.style.display = "block";
+    }else{
+      lowBox.style.display = "none";
+    }
+
+    document.getElementById("cloudIcon").textContent = data.icon;
+    document.getElementById("cloudName").textContent = cloudKey;
+    document.getElementById("cloudCode").textContent = `(${data.code})`;
+    document.getElementById("cloudThai").textContent = data.thai;
+
+    document.getElementById("cloudLevel").textContent = data.level;
+    document.getElementById("appearance").textContent = data.appearance;
+    document.getElementById("weather").textContent = data.weather;
+    document.getElementById("environment").textContent = data.environment;
+    document.getElementById("nextWeather").textContent = data.next;
+    document.getElementById("ground").textContent = data.ground;
+    document.getElementById("warning").textContent = data.warning;
+  }
+
+  updateResultLocation();
+
+  const warningBox =
+    document.getElementById("warningBox");
+
+  warningBox.className = "info full warning";
+
+  if(!isUnknown && cloudKey === "Cumulonimbus"){
+    warningBox.classList.add("danger");
+  }
+
+  showTopPredictions(predictions);
+}
+
+
+/* =========================================================
+
+   9) TOP 3 PREDICTIONS
+
+   ========================================================= */
+
+
+
+function showTopPredictions(predictions){
+
+
+
+  const list = document.getElementById("predictionList");
+
+  list.innerHTML = "";
+
+
+
+  predictions.slice(0,3).forEach(prediction => {
+
+
+
+    const mappedName =
+
+      getCloudKey(prediction.className)
+
+      || prediction.className;
+
+
+
+    const percent =
+
+      prediction.probability * 100;
+
+
+
+    const row =
+
+      document.createElement("div");
+
+
+
+    row.className = "pred-row";
+
+
+
+    row.innerHTML = `
+
+      <span>${mappedName}</span>
+
+
+
+      <div class="bar">
+
+        <div
+
+          class="fill"
+
+          style="width:${Math.max(0,Math.min(100,percent))}%">
+
+        </div>
+
+      </div>
+
+
+
+      <span>${percent.toFixed(1)}%</span>
+
+    `;
+
+
+
+    list.appendChild(row);
+
+  });
+
+}
+
+
+
+
+
+
+
+/* =========================================================
+
+   10) MY SKY LOG
+
+   ========================================================= */
+
+
+
+const JOURNAL_KEY = "CloudLens_SkyJournal_v1";
+
+const JOURNAL_LIMIT = 30;
+
+
+
+function getJournal(){
+
+  try{
+
+    return JSON.parse(localStorage.getItem(JOURNAL_KEY) || "[]");
+
+  }catch(error){
+
+    console.error("Journal read error:", error);
+
+    return [];
+
+  }
+
+}
+
+
+
+function setJournal(items){
+
+  localStorage.setItem(
+
+    JOURNAL_KEY,
+
+    JSON.stringify(items.slice(0, JOURNAL_LIMIT))
+
+  );
+
+}
+
+
+
+function makeThumbnail(img, maxSize = 360){
+
+
+
+  const canvas = document.createElement("canvas");
+
+  const ctx = canvas.getContext("2d");
+
+
+
+  const width = img.naturalWidth || img.width;
+
+  const height = img.naturalHeight || img.height;
+
+
+
+  if(!width || !height){
+
+    return "";
+
+  }
+
+
+
+  const scale = Math.min(1, maxSize / Math.max(width, height));
+
+
+
+  canvas.width = Math.max(1, Math.round(width * scale));
+
+  canvas.height = Math.max(1, Math.round(height * scale));
+
+
+
+  ctx.drawImage(
+
+    img,
+
+    0,
+
+    0,
+
+    canvas.width,
+
+    canvas.height
+
+  );
+
+
+
+  return canvas.toDataURL("image/jpeg", 0.68);
+
+}
+
+
+
+function saveCurrentResult(){
+
+  if(!currentResult){
+
+    showToast("ยังไม่มีผลการวิเคราะห์ให้บันทึก");
+
+    return;
+  }
+
+  const preview =
+    document.getElementById("preview");
+
+  const rawData =
+    cloudData[currentResult.rawCloudKey || currentResult.cloudKey];
+
+  const item = {
+
+    id: Date.now(),
+
+    cloudKey:
+      currentResult.isUnknown
+        ? "Not Sure"
+        : currentResult.cloudKey,
+
+    code:
+      currentResult.isUnknown
+        ? "—"
+        : rawData.code,
+
+    thai:
+      currentResult.isUnknown
+        ? `ยังไม่สามารถระบุได้อย่างมั่นใจ · ผู้สมัครอันดับ 1 ${rawData.thai}`
+        : rawData.thai,
+
+    confidence:
+      currentResult.probability,
+
+    analyzedAt:
+      currentResult.analyzedAt,
+
+    thumbnail:
+      makeThumbnail(preview),
+
+    location: {
+
+      source: currentLocation.source,
+
+      label: currentLocation.label,
+
+      latitude: currentLocation.latitude,
+
+      longitude: currentLocation.longitude,
+
+      accuracy: currentLocation.accuracy
+
+    }
+
+  };
+
+  const items =
+    getJournal();
+
+  items.unshift(item);
+
+  try{
+
+    setJournal(items);
+
+  }catch(error){
+
+    console.error(
+      "Journal save error:",
+      error
+    );
+
+    const fallback =
+      items.slice(0,10).map(x => ({
+        ...x,
+        thumbnail:""
+      }));
+
+    localStorage.setItem(
+      JOURNAL_KEY,
+      JSON.stringify(fallback)
+    );
+  }
+
+  renderJournal();
+
+  showToast(
+    "บันทึกผลลง My Sky Log แล้ว"
+  );
+}
+
+function renderJournal(){
+
+
+
+  const grid = document.getElementById("journalGrid");
+
+  const count = document.getElementById("journalCount");
+
+
+
+  const items = getJournal();
+
+
+
+  count.textContent =
+
+    items.length
+
+      ? `บันทึกไว้ ${items.length} รายการ`
+
+      : "ยังไม่มีรายการ";
+
+
+
+  grid.innerHTML = "";
+
+
+
+  if(!items.length){
+
+
+
+    grid.innerHTML = `
+
+      <div class="journal-empty">
+
+        <div style="font-size:42px">🌥️</div>
+
+        <strong>ยังไม่มีประวัติการวิเคราะห์</strong>
+
+        <div style="margin-top:7px">
+
+          เมื่อวิเคราะห์ภาพแล้ว กด “บันทึกลง My Sky Log”
+
+        </div>
+
+      </div>
+
+    `;
+
+
+
+    return;
+
+  }
+
+
+
+  items.forEach(item => {
+
+
+
+    const date = new Date(item.analyzedAt);
+
+
+
+    const dateText = new Intl.DateTimeFormat(
+
+      "th-TH",
+
+      {
+
+        dateStyle:"medium",
+
+        timeStyle:"short"
+
+      }
+
+    ).format(date);
+
+
+
+    const card = document.createElement("article");
+
+    card.className = "journal-card";
+
+
+
+    const imageHTML =
+
+      item.thumbnail
+
+        ? `<img class="journal-thumb" src="${item.thumbnail}" alt="${item.cloudKey}">`
+
+        : `<div class="journal-thumb" style="display:grid;place-items:center;font-size:44px">☁️</div>`;
+
+
+
+    card.innerHTML = `
+
+      ${imageHTML}
+
+
+
+      <div class="journal-body">
+
+        <h3>${item.cloudKey} (${item.code})</h3>
+
+        <div class="sub">${item.thai}<br>${dateText}</div>
+
+
+
+        <div class="journal-location">
+
+          📍 ${
+
+            item.location && item.location.label
+
+              ? item.location.label
+
+              : "ไม่ได้ระบุสถานที่"
+
+          }
+
+        </div>
+
+
+
+        <span class="score">
+
+          Confidence ${(item.confidence * 100).toFixed(1)}%
+
+        </span>
+
+      </div>
+
+    `;
+
+
+
+    grid.appendChild(card);
+
+  });
+
+}
+
+
+
+function clearJournal(){
+
+
+
+  const items = getJournal();
+
+
+
+  if(!items.length){
+
+    showToast("ยังไม่มีประวัติให้ล้าง");
+
+    return;
+
+  }
+
+
+
+  if(!confirm("ต้องการล้างประวัติ My Sky Log ทั้งหมดหรือไม่?")){
+
+    return;
+
+  }
+
+
+
+  localStorage.removeItem(JOURNAL_KEY);
+
+  renderJournal();
+
+  showToast("ล้างประวัติเรียบร้อย");
+
+}
+
+
+
+
+
+
+/* =========================================================
+   EXPORT RESULT CARD
+   ========================================================= */
+
+async function exportResultCard(){
+
+  if(!currentResult){
+
+    showToast(
+      "ยังไม่มีผลการวิเคราะห์ให้บันทึกเป็นรูป"
+    );
+
+    return;
+  }
+
+  if(typeof html2canvas === "undefined"){
+
+    alert(
+      "ไม่สามารถโหลดระบบสร้างรูปได้ กรุณาตรวจสอบอินเทอร์เน็ต"
+    );
+
+    return;
+  }
+
+  const rawData =
+    cloudData[
+      currentResult.rawCloudKey ||
+      currentResult.cloudKey
+    ];
+
+  const isUnknown =
+    currentResult.isUnknown;
+
+  const confidence =
+    currentResult.probability * 100;
+
+  const confidenceLevel =
+    getConfidenceLevel(
+      currentResult.probability
+    );
+
+  const locationText =
+    currentLocation.label ||
+    "ไม่พบข้อมูลสถานที่";
+
+  const dateText =
+    new Intl.DateTimeFormat(
+      "th-TH",
+      {
+        dateStyle:"medium",
+        timeStyle:"short"
+      }
+    ).format(
+      new Date(
+        currentResult.analyzedAt
+      )
+    );
+
+  const card =
+    document.createElement("div");
+
+  card.className =
+    "export-card";
+
+  const resultName =
+    isUnknown
+      ? "Not Sure"
+      : `${currentResult.cloudKey} (${rawData.code})`;
+
+  const resultThai =
+    isUnknown
+      ? `ยังไม่สามารถระบุได้อย่างมั่นใจ · ผู้สมัครอันดับ 1 ${rawData.thai} (${rawData.code})`
+      : rawData.thai;
+
+  const detailHTML =
+    isUnknown
+      ? `
+        <div class="export-info-box full">
+          <strong>ผลการวิเคราะห์</strong>
+          <div>
+            Confidence ต่ำกว่า ${Math.round(UNKNOWN_THRESHOLD * 100)}%
+            ระบบจึงไม่ฟันธงชนิดเมฆจากภาพนี้
+          </div>
+        </div>
+      `
+      : `
+        <div class="export-info-box">
+          <strong>ระดับของเมฆ</strong>
+          <div>${rawData.level}</div>
+        </div>
+
+        <div class="export-info-box">
+          <strong>ลักษณะเด่น</strong>
+          <div>${rawData.appearance}</div>
+        </div>
+
+        <div class="export-info-box full">
+          <strong>สภาพอากาศที่มักสัมพันธ์</strong>
+          <div>${rawData.weather}</div>
+        </div>
+
+        <div class="export-info-box full">
+          <strong>การเฝ้าสังเกต</strong>
+          <div>${rawData.warning}</div>
+        </div>
+      `;
+
+  card.innerHTML = `
+    <div class="export-header">
+      <div class="export-brand">
+        CloudLens <span>AI</span>
+      </div>
+      <div class="export-date">
+        ${dateText}
+      </div>
+    </div>
+
+    ${
+      selectedImage
+        ? `<img class="export-image" src="${selectedImage}" alt="Cloud image">`
+        : ""
+    }
+
+    <div class="export-main">
+      <div class="export-main-icon">
+        ${isUnknown ? "❔" : rawData.icon}
+      </div>
+
+      <div>
+        <h2>${resultName}</h2>
+        <p>${resultThai}</p>
+
+        <div class="export-confidence">
+          AI Confidence ${confidence.toFixed(1)}%
+          · ${confidenceLevel.label}
+        </div>
+      </div>
+    </div>
+
+    <div class="export-info">
+      <div class="export-info-box full">
+        <strong>📍 สถานที่</strong>
+        <div>${locationText}</div>
+      </div>
+
+      ${detailHTML}
+    </div>
+
+    <div style="
+      margin-top:16px;
+      color:#7b909b;
+      font-size:11px;
+      line-height:1.6;
+    ">
+      CloudLens AI จำแนกจากภาพด้วย Google Teachable Machine
+      · ข้อมูลสภาพอากาศเป็นความรู้ประกอบ ไม่ใช่พยากรณ์แบบเรียลไทม์
+    </div>
+  `;
+
+  document.body.appendChild(card);
+
+  try{
+
+    await new Promise(resolve =>
+      setTimeout(resolve,150)
+    );
+
+    const canvas =
+      await html2canvas(
+        card,
+        {
+          backgroundColor:"#f7fbfd",
+          scale:2,
+          useCORS:true
+        }
+      );
+
+    const link =
+      document.createElement("a");
+
+    const safeName =
+      isUnknown
+        ? "NotSure"
+        : currentResult.cloudKey;
+
+    link.download =
+      `CloudLens_${safeName}_${Date.now()}.png`;
+
+    link.href =
+      canvas.toDataURL("image/png");
+
+    link.click();
+
+    showToast(
+      "บันทึก Result Card เป็น PNG แล้ว"
+    );
+
+  }catch(error){
+
+    console.error(
+      "Export result error:",
+      error
+    );
+
+    alert(
+      "ไม่สามารถสร้างรูปผลวิเคราะห์ได้: " +
+      error.message
+    );
+
+  }finally{
+
+    card.remove();
+  }
+}
+
+
+/* =========================================================
+
+   11) TOAST
+
+   ========================================================= */
+
+
+
+let toastTimer = null;
+
+
+
+function showToast(message){
+
+
+
+  const toast = document.getElementById("toast");
+
+
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+
+
+  clearTimeout(toastTimer);
+
+
+
+  toastTimer = setTimeout(() => {
+
+    toast.classList.remove("show");
+
+  }, 2400);
+
+}
+
+
+
+
+
+/* =========================================================
+
+   12) START
+
+   ========================================================= */
+
+
+
+window.addEventListener(
+
+  "DOMContentLoaded",
+
+  () => {
+
+    loadModel();
+
+    renderJournal();
+
+
+  }
+
+);
+
+
+
+
+function shareCloudLens(){
+
+  const url = window.location.href.split("#")[0];
+
+  if(navigator.share){
+    navigator.share({
+      title:"CloudLens AI",
+      text:"เปิด CloudLens AI เพื่อวิเคราะห์ชนิดเมฆ",
+      url
+    }).catch(() => {});
+    return;
+  }
+
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url)
+      .then(() => showToast("คัดลอกลิงก์เว็บแล้ว"))
+      .catch(() => window.prompt("คัดลอกลิงก์นี้", url));
+    return;
+  }
+
+  window.prompt("คัดลอกลิงก์นี้", url);
+}
+
+</script>
+
+
+
+</body>
+
+</html>

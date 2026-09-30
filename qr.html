@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CloudLens AI - QR Code</title>
+<meta name="theme-color" content="#dff4ff">
+<style>
+:root{
+  --ink:#173042;
+  --muted:#6c8190;
+  --navy:#173f56;
+  --blue:#287fa8;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,"Noto Sans Thai",sans-serif;
+  color:var(--ink);
+  background:linear-gradient(180deg,#dff4ff,#f8fbfd 52%,#edf8f4);
+}
+.wrap{
+  width:min(760px,calc(100% - 28px));
+  margin:auto;
+  padding:42px 0 60px;
+}
+.card{
+  background:rgba(255,255,255,.9);
+  border:1px solid rgba(255,255,255,.98);
+  border-radius:28px;
+  padding:26px;
+  box-shadow:0 20px 55px rgba(36,82,109,.12);
+}
+.brand{
+  font-size:28px;
+  font-weight:800;
+}
+.brand span{color:var(--blue)}
+h1{font-size:34px;margin:22px 0 8px}
+p{color:var(--muted);line-height:1.7}
+#qrcode{
+  width:290px;
+  max-width:100%;
+  aspect-ratio:1;
+  margin:24px auto;
+  display:grid;
+  place-items:center;
+  background:white;
+  border-radius:20px;
+  padding:16px;
+  border:1px solid #dce9ef;
+}
+#qrcode img,#qrcode canvas{max-width:100%!important;height:auto!important}
+.url{
+  word-break:break-all;
+  padding:13px 14px;
+  background:#eef7fa;
+  border-radius:14px;
+  font-size:13px;
+  color:#426c80;
+}
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+  flex-wrap:wrap;
+}
+button,a.btn{
+  flex:1;
+  min-width:170px;
+  border:0;
+  border-radius:14px;
+  padding:14px 17px;
+  font:inherit;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  text-decoration:none;
+  text-align:center;
+}
+.primary{background:var(--navy);color:white}
+.secondary{background:#e8f5fa;color:#285d75}
+.note{
+  margin-top:18px;
+  padding:13px 14px;
+  border-radius:14px;
+  background:#fff7df;
+  color:#805f26;
+  font-size:12px;
+  line-height:1.65;
+}
+@media(max-width:600px){
+  .wrap{padding-top:22px}
+  h1{font-size:29px}
+  .actions{flex-direction:column}
+  button,a.btn{width:100%}
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="brand">CloudLens <span>AI</span></div>
+    <h1>QR Code สำหรับเปิดบนโทรศัพท์</h1>
+    <p>
+      เมื่อหน้าเว็บนี้ถูกเปิดจาก GitHub Pages ระบบจะสร้าง QR Code
+      ของหน้า CloudLens AI ให้อัตโนมัติ สามารถสแกนจากโทรศัพท์ได้ทันที
+    </p>
+
+    <div id="qrcode"></div>
+    <div id="siteUrl" class="url"></div>
+
+    <div class="actions">
+      <button class="primary" onclick="downloadQR()">ดาวน์โหลด QR PNG</button>
+      <button class="secondary" onclick="copyLink()">คัดลอกลิงก์</button>
+      <a class="btn secondary" href="./">กลับ CloudLens AI</a>
+    </div>
+
+    <div id="localNote" class="note" style="display:none">
+      QR นี้ตั้งค่าไว้สำหรับ https://chiel26.github.io/cloudlens-ai/
+      เมื่ออัปโหลดขึ้น GitHub Pages แล้ว ลิงก์นี้จะเปิด CloudLens AI โดยตรง
+    </div>
+  </div>
+</div>
+
+<script>
+let qr = null;
+
+function getSiteUrl(){
+  const isLocal =
+    location.protocol === "file:" ||
+    location.hostname === "localhost" ||
+    location.hostname === "127.0.0.1";
+
+  if(isLocal){
+    document.getElementById("localNote").style.display = "block";
+    return "https://chiel26.github.io/cloudlens-ai/";
+  }
+
+  const current = new URL(window.location.href);
+  current.hash = "";
+  current.search = "";
+  current.pathname = current.pathname.replace(/qr\.html$/, "");
+  return current.toString();
+}
+
+function renderQR(){
+  const url = getSiteUrl();
+  document.getElementById("siteUrl").textContent = url;
+
+  document.getElementById("qrcode").innerHTML = "";
+
+  qr = new QRCode(document.getElementById("qrcode"), {
+    text:url,
+    width:256,
+    height:256,
+    correctLevel:QRCode.CorrectLevel.H
+  });
+}
+
+function copyLink(){
+  const url = document.getElementById("siteUrl").textContent;
+
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url)
+      .then(() => alert("คัดลอกลิงก์แล้ว"))
+      .catch(() => window.prompt("คัดลอกลิงก์นี้",url));
+  }else{
+    window.prompt("คัดลอกลิงก์นี้",url);
+  }
+}
+
+function downloadQR(){
+  const holder = document.getElementById("qrcode");
+  const canvas = holder.querySelector("canvas");
+  const img = holder.querySelector("img");
+
+  let dataUrl = "";
+
+  if(canvas){
+    dataUrl = canvas.toDataURL("image/png");
+  }else if(img){
+    dataUrl = img.src;
+  }
+
+  if(!dataUrl){
+    alert("ยังสร้าง QR Code ไม่เสร็จ");
+    return;
+  }
+
+  const link = document.createElement("a");
+  link.download = "CloudLens_AI_QR.png";
+  link.href = dataUrl;
+  link.click();
+}
+
+window.addEventListener("DOMContentLoaded",renderQR);
+</script>
+</body>
+</html>
