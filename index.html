@@ -9,12 +9,12 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CloudLens AI</title>
+<title>MekLens AI</title>
 
 <meta name="theme-color" content="#06182d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="CloudLens AI">
+<meta name="apple-mobile-web-app-title" content="MekLens AI">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -1430,36 +1430,1690 @@ footer{
 
 
 /* =========================================================
+   CLOUDLENS AURORA GLASS THEME
+   Visual-only layer: no application logic is changed
+   ========================================================= */
+
+:root{
+  --bg1:#041225;
+  --bg2:#071c34;
+  --bg3:#09283e;
+
+  --card:rgba(7,30,55,.68);
+  --ink:#f4fbff;
+  --muted:#aac5d7;
+
+  --blue:#48d8ff;
+  --cyan:#56f0ff;
+  --violet:#8a6cff;
+  --navy:#2d6cff;
+
+  --line:rgba(140,213,255,.18);
+
+  --green:#55e6bc;
+  --yellow:#ffd273;
+  --red:#ff8585;
+
+  --glass-border:rgba(153,221,255,.22);
+  --glass-hi:rgba(255,255,255,.08);
+  --shadow:0 24px 72px rgba(0,10,30,.34);
+  --glow:0 0 32px rgba(71,206,255,.16);
+
+  --spot-x:22%;
+  --spot-y:8%;
+}
+
+html{
+  background:#03101f;
+  color-scheme:dark;
+}
+
+body{
+  color:var(--ink);
+  overflow-x:hidden;
+  background:
+    radial-gradient(circle at var(--spot-x) var(--spot-y),
+      rgba(70,214,255,.13),transparent 24%),
+    radial-gradient(circle at 82% 16%,
+      rgba(89,105,255,.19),transparent 30%),
+    radial-gradient(circle at 50% 70%,
+      rgba(42,194,255,.11),transparent 36%),
+    linear-gradient(180deg,#041225 0%,#071d35 46%,#071827 100%);
+  background-attachment:fixed;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI","Noto Sans Thai",Arial,sans-serif;
+}
+
+/* ambient aurora */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-22%;
+  z-index:-2;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 20% 28%,rgba(30,205,255,.14),transparent 34%),
+    radial-gradient(ellipse at 82% 16%,rgba(104,81,255,.18),transparent 31%),
+    radial-gradient(ellipse at 62% 76%,rgba(25,139,255,.12),transparent 35%);
+  filter:blur(22px);
+  animation:cloudlensAurora 18s ease-in-out infinite alternate;
+}
+
+/* subtle stars / air particles */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  opacity:.28;
+  background-image:
+    radial-gradient(circle,rgba(196,237,255,.56) 0 1px,transparent 1.4px),
+    radial-gradient(circle,rgba(122,207,255,.42) 0 1px,transparent 1.3px);
+  background-size:64px 64px,96px 96px;
+  background-position:4px 12px,37px 58px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.8),rgba(0,0,0,.15));
+}
+
+@keyframes cloudlensAurora{
+  0%{transform:translate3d(-1.5%,0,0) scale(1)}
+  50%{transform:translate3d(2%,1.2%,0) scale(1.04)}
+  100%{transform:translate3d(-.5%,2%,0) scale(1.02)}
+}
+
+.container{
+  width:min(1240px,calc(100% - 28px));
+  position:relative;
+  z-index:1;
+}
+
+/* ---------- HEADER ---------- */
+
+header{
+  position:sticky;
+  top:12px;
+  z-index:60;
+  min-height:70px;
+  margin-top:12px;
+  padding:11px 16px;
+  border:1px solid var(--glass-border);
+  border-radius:21px;
+  background:linear-gradient(135deg,rgba(6,28,55,.80),rgba(5,22,44,.64));
+  box-shadow:
+    0 14px 42px rgba(0,8,24,.28),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  backdrop-filter:blur(20px) saturate(155%);
+  -webkit-backdrop-filter:blur(20px) saturate(155%);
+}
+
+.logo{
+  color:#fff;
+  font-size:24px;
+  letter-spacing:-.7px;
+  text-shadow:0 0 24px rgba(73,215,255,.16);
+}
+
+.logo span{
+  color:transparent;
+  background:linear-gradient(90deg,#5df2ff,#58a7ff,#a47dff);
+  -webkit-background-clip:text;
+  background-clip:text;
+}
+
+.nav-links a{
+  position:relative;
+  color:#cfe6f5;
+  border:1px solid transparent;
+  transition:
+    background .28s ease,
+    color .28s ease,
+    border-color .28s ease,
+    transform .28s ease;
+}
+
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:18%;
+  right:18%;
+  bottom:3px;
+  height:2px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#4de9ff,#8d77ff);
+  transform:scaleX(0);
+  transform-origin:center;
+  transition:transform .28s ease;
+}
+
+.nav-links a:hover{
+  color:#fff;
+  background:rgba(70,197,255,.09);
+  border-color:rgba(99,211,255,.16);
+  transform:translateY(-1px);
+}
+
+.nav-links a:hover::after{
+  transform:scaleX(1);
+}
+
+.model-status{
+  border:1px solid rgba(255,211,114,.22);
+  background:rgba(255,187,55,.10);
+  color:#ffe0a1;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+.model-status.ready{
+  background:rgba(63,225,177,.10);
+  color:#75f1c9;
+  border-color:rgba(99,238,196,.21);
+}
+
+.model-status.error{
+  background:rgba(255,93,93,.10);
+  color:#ffaaaa;
+  border-color:rgba(255,128,128,.2);
+}
+
+.model-status.ready .dot{
+  box-shadow:0 0 14px currentColor;
+  animation:statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse{
+  0%,100%{opacity:.72;transform:scale(.92)}
+  50%{opacity:1;transform:scale(1.18)}
+}
+
+/* ---------- HERO ---------- */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  min-height:515px;
+  margin:20px 0 28px;
+  padding:58px 44px;
+  border:1px solid rgba(131,216,255,.19);
+  border-radius:36px;
+  background:
+    radial-gradient(circle at 72% 38%,rgba(70,213,255,.18),transparent 23%),
+    radial-gradient(circle at 89% 18%,rgba(97,75,255,.17),transparent 28%),
+    linear-gradient(135deg,rgba(6,39,74,.91),rgba(7,27,53,.83) 52%,rgba(5,19,39,.90));
+  box-shadow:
+    0 32px 80px rgba(0,9,30,.38),
+    inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:auto -9% -46% 35%;
+  height:82%;
+  z-index:-1;
+  border-radius:50%;
+  background:
+    radial-gradient(ellipse at center,
+      rgba(112,215,255,.20),
+      rgba(82,112,255,.08) 42%,
+      transparent 68%);
+  filter:blur(14px);
+  animation:heroGlow 8s ease-in-out infinite alternate;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  right:-92px;
+  top:-188px;
+  z-index:-1;
+  border-radius:50%;
+  border:1px solid rgba(91,224,255,.18);
+  box-shadow:
+    0 0 0 52px rgba(56,166,255,.025),
+    0 0 0 108px rgba(121,82,255,.02);
+  animation:heroOrbit 16s linear infinite;
+}
+
+@keyframes heroGlow{
+  from{transform:translate3d(-2%,1%,0) scale(.96)}
+  to{transform:translate3d(3%,-2%,0) scale(1.06)}
+}
+
+@keyframes heroOrbit{
+  to{transform:rotate(360deg)}
+}
+
+.hero h1{
+  color:#fff;
+  font-size:clamp(50px,7vw,86px);
+  line-height:.94;
+  letter-spacing:-3.2px;
+  text-shadow:0 18px 50px rgba(0,0,0,.18);
+}
+
+.hero h1 span{
+  color:transparent;
+  background:
+    linear-gradient(90deg,#66f0ff 0%,#65b8ff 43%,#a887ff 72%,#ffb8df 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(72,212,255,.16));
+}
+
+.hero p{
+  color:#c4d9e8;
+  max-width:690px;
+  font-size:17px;
+  line-height:1.9;
+}
+
+.hero-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(128,220,255,.24);
+  background:
+    linear-gradient(145deg,rgba(19,61,101,.62),rgba(8,34,67,.43));
+  box-shadow:
+    0 26px 70px rgba(0,8,28,.36),
+    inset 0 1px 0 rgba(255,255,255,.09),
+    0 0 45px rgba(58,173,255,.08);
+  backdrop-filter:blur(22px) saturate(150%);
+  -webkit-backdrop-filter:blur(22px) saturate(150%);
+  animation:heroCardFloat 6.4s ease-in-out infinite;
+}
+
+.hero-card::before{
+  content:"";
+  position:absolute;
+  width:150px;
+  height:150px;
+  right:-50px;
+  top:-55px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(91,229,255,.22),transparent 65%);
+  filter:blur(3px);
+}
+
+@keyframes heroCardFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+.hero-cloud{
+  font-size:92px;
+  filter:
+    drop-shadow(0 15px 24px rgba(0,0,0,.22))
+    drop-shadow(0 0 22px rgba(108,223,255,.20));
+  animation:cloudFloat 5s ease-in-out infinite;
+}
+
+@keyframes cloudFloat{
+  0%,100%{transform:translate3d(0,0,0) rotate(-1deg)}
+  50%{transform:translate3d(0,-8px,0) rotate(1.2deg)}
+}
+
+.hero-card h3{
+  color:#fff;
+  letter-spacing:.1px;
+}
+
+.hero-card p{
+  color:#b8cedd;
+}
+
+.feature-chip{
+  color:#dff7ff;
+  border:1px solid rgba(100,214,255,.18);
+  background:rgba(78,184,255,.09);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+  transition:transform .25s ease,background .25s ease,border-color .25s ease;
+}
+
+.feature-chip:hover{
+  transform:translateY(-2px);
+  background:rgba(84,199,255,.15);
+  border-color:rgba(105,222,255,.28);
+}
+
+/* ---------- GLASS CARDS ---------- */
+
+.card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--glass-border);
+  background:
+    linear-gradient(145deg,rgba(10,40,72,.76),rgba(5,25,49,.69));
+  box-shadow:
+    var(--shadow),
+    inset 0 1px 0 rgba(255,255,255,.065);
+  backdrop-filter:blur(23px) saturate(145%);
+  -webkit-backdrop-filter:blur(23px) saturate(145%);
+  transform:
+    perspective(1000px)
+    rotateX(var(--tilt-x,0deg))
+    rotateY(var(--tilt-y,0deg))
+    translateY(var(--lift,0px));
+  transform-style:preserve-3d;
+  transition:
+    transform .24s ease,
+    border-color .28s ease,
+    box-shadow .28s ease,
+    background .28s ease;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.0;
+  background:
+    radial-gradient(circle at var(--card-x,50%) var(--card-y,50%),
+      rgba(79,215,255,.14),transparent 36%);
+  transition:opacity .28s ease;
+}
+
+.card:hover{
+  --lift:-4px;
+  border-color:rgba(106,218,255,.34);
+  box-shadow:
+    0 30px 78px rgba(0,8,30,.43),
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 42px rgba(74,202,255,.08);
+}
+
+.card:hover::before{
+  opacity:1;
+}
+
+.card h2,
+.section-heading h2{
+  color:#fff;
+}
+
+.section-heading p{
+  color:#a9c1d2;
+}
+
+/* ---------- INPUT TABS ---------- */
+
+.input-mode-switch{
+  border:1px solid rgba(113,210,255,.15);
+  background:rgba(1,17,35,.48);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+.mode-button{
+  color:#91b7cb;
+}
+
+.mode-button.active{
+  color:#fff;
+  background:
+    linear-gradient(135deg,rgba(48,174,255,.84),rgba(83,91,255,.89));
+  box-shadow:
+    0 7px 22px rgba(41,119,255,.27),
+    inset 0 1px 0 rgba(255,255,255,.15);
+}
+
+/* ---------- UPLOAD / CAMERA ---------- */
+
+.upload-box{
+  border:1px solid rgba(102,211,255,.28);
+  background:
+    radial-gradient(circle at 70% 15%,rgba(92,107,255,.15),transparent 28%),
+    radial-gradient(circle at 25% 78%,rgba(51,208,255,.11),transparent 32%),
+    linear-gradient(145deg,rgba(8,35,64,.84),rgba(4,23,44,.88));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.045),
+    inset 0 0 42px rgba(41,165,255,.045);
+}
+
+.upload-box::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+  background:
+    linear-gradient(120deg,transparent 20%,rgba(112,231,255,.05) 45%,transparent 72%);
+  transform:translateX(-100%);
+  animation:uploadSweep 7s ease-in-out infinite;
+}
+
+@keyframes uploadSweep{
+  0%,58%{transform:translateX(-115%)}
+  78%,100%{transform:translateX(115%)}
+}
+
+.upload-empty{
+  position:relative;
+  z-index:2;
+}
+
+.upload-empty h3{
+  color:#fff;
+}
+
+.upload-empty p{
+  color:#9fbccc;
+}
+
+.upload-empty .icon,
+.placeholder .icon{
+  filter:drop-shadow(0 0 24px rgba(74,211,255,.16));
+}
+
+#preview,
+#cameraVideo{
+  background:#061426;
+}
+
+.camera-live-badge{
+  border:1px solid rgba(117,221,255,.23);
+  background:rgba(3,18,35,.76);
+  box-shadow:
+    0 12px 32px rgba(0,0,0,.24),
+    0 0 26px rgba(56,209,255,.09);
+}
+
+.camera-live-badge .live-dot{
+  box-shadow:0 0 13px #ff625f;
+  animation:livePulse 1.35s ease-in-out infinite;
+}
+
+@keyframes livePulse{
+  0%,100%{opacity:.58;transform:scale(.9)}
+  50%{opacity:1;transform:scale(1.22)}
+}
+
+.camera-help{
+  color:#afcddd;
+  border:1px solid rgba(91,213,255,.14);
+  background:rgba(18,68,102,.29);
+}
+
+/* ---------- BUTTONS ---------- */
+
+button{
+  position:relative;
+  overflow:hidden;
+  color:inherit;
+  border:1px solid transparent;
+  transform:translateY(0) scale(1);
+  transition:
+    transform .18s cubic-bezier(.2,.8,.2,1),
+    box-shadow .24s ease,
+    background .24s ease,
+    border-color .24s ease,
+    filter .24s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+
+button::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(110deg,transparent 18%,rgba(255,255,255,.20) 50%,transparent 82%);
+  transform:translateX(-140%);
+  transition:transform .58s ease;
+}
+
+button:hover::before{
+  transform:translateX(140%);
+}
+
+button:hover{
+  transform:translateY(-2px);
+}
+
+button:active{
+  transform:translateY(1px) scale(.975);
+}
+
+.primary{
+  color:#fff;
+  border-color:rgba(139,221,255,.24);
+  background:
+    linear-gradient(125deg,#15c7ff 0%,#3279ff 52%,#7f54ff 100%);
+  box-shadow:
+    0 11px 27px rgba(41,109,255,.27),
+    inset 0 1px 0 rgba(255,255,255,.18);
+}
+
+.primary:hover{
+  background:
+    linear-gradient(125deg,#3bd4ff 0%,#4986ff 52%,#946cff 100%);
+  box-shadow:
+    0 14px 34px rgba(52,123,255,.35),
+    0 0 24px rgba(69,217,255,.09);
+}
+
+.secondary{
+  color:#d8effb;
+  border-color:rgba(105,205,255,.16);
+  background:rgba(39,118,169,.17);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045);
+}
+
+.secondary:hover{
+  color:#fff;
+  border-color:rgba(107,215,255,.30);
+  background:rgba(51,144,200,.23);
+}
+
+.ui-ripple{
+  position:absolute;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:5;
+  background:rgba(255,255,255,.42);
+  transform:translate(-50%,-50%) scale(0);
+  animation:rippleOut .62s ease-out forwards;
+}
+
+@keyframes rippleOut{
+  to{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(14);
+  }
+}
+
+/* ---------- LOCATION ---------- */
+
+.location-panel{
+  border:1px solid rgba(93,204,255,.17);
+  background:
+    linear-gradient(145deg,rgba(7,36,64,.75),rgba(6,28,52,.58));
+}
+
+.location-panel h3{
+  color:#eafbff;
+}
+
+.location-help{
+  color:#98b9cc;
+}
+
+.location-manual input{
+  color:#eefaff;
+  border-color:rgba(105,204,255,.20);
+  background:rgba(3,19,36,.72);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+.location-manual input::placeholder{
+  color:#6f91a6;
+}
+
+.location-manual input:focus{
+  border-color:#4ccfff;
+  box-shadow:0 0 0 3px rgba(76,207,255,.10);
+}
+
+.location-status{
+  color:#a7ccdd;
+  border:1px solid rgba(92,206,255,.10);
+  background:rgba(42,135,180,.11);
+}
+
+.location-status.good{
+  color:#79efc9;
+  background:rgba(55,205,160,.10);
+  border-color:rgba(91,230,188,.16);
+}
+
+.location-status.error{
+  color:#ffaaaa;
+  background:rgba(255,95,95,.10);
+  border-color:rgba(255,128,128,.14);
+}
+
+/* ---------- RESULT ---------- */
+
+.placeholder{
+  color:#89a9bc;
+}
+
+.badge{
+  color:#7df2c9;
+  border:1px solid rgba(110,239,198,.17);
+  background:rgba(64,218,170,.10);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+.badge.high{
+  color:#79efc9;
+  background:rgba(61,218,170,.10);
+}
+
+.badge.medium{
+  color:#ffe097;
+  background:rgba(255,190,65,.10);
+  border-color:rgba(255,208,105,.17);
+}
+
+.badge.low{
+  color:#ffaaaa;
+  background:rgba(255,100,100,.10);
+  border-color:rgba(255,126,126,.17);
+}
+
+.cloud-icon{
+  border:1px solid rgba(95,215,255,.18);
+  background:
+    linear-gradient(145deg,rgba(41,155,207,.19),rgba(41,76,157,.16));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 0 28px rgba(60,204,255,.08);
+}
+
+.cloud-title h2{
+  color:#fff;
+}
+
+.cloud-title p{
+  color:#9fbccd;
+}
+
+.cloud-code{
+  color:#79dfff;
+}
+
+.info{
+  border:1px solid rgba(105,203,255,.13);
+  background:
+    linear-gradient(145deg,rgba(13,48,79,.60),rgba(6,30,56,.56));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+  transition:transform .24s ease,border-color .24s ease,background .24s ease;
+}
+
+.info:hover{
+  transform:translateY(-2px);
+  border-color:rgba(102,216,255,.24);
+  background:
+    linear-gradient(145deg,rgba(15,58,92,.67),rgba(7,35,65,.62));
+}
+
+.info h3{
+  color:#7fe6ff;
+}
+
+.info p{
+  color:#d8e9f2;
+}
+
+.location-result{
+  background:
+    linear-gradient(145deg,rgba(23,90,118,.35),rgba(7,39,69,.56));
+}
+
+.warning{
+  color:#ffe7a9;
+  border-color:rgba(255,209,103,.16);
+  background:rgba(181,118,20,.11);
+}
+
+.warning h3{
+  color:#ffd77a;
+}
+
+.danger{
+  color:#ffd2d2;
+  border-color:rgba(255,117,117,.18);
+  background:rgba(189,55,55,.12);
+}
+
+.danger h3{
+  color:#ff9b9b;
+}
+
+.predictions{
+  border-color:rgba(124,208,255,.13);
+}
+
+.predictions > strong{
+  color:#effaff;
+}
+
+.pred-row{
+  color:#cde1ec;
+}
+
+.bar{
+  background:rgba(175,220,244,.10);
+  border:1px solid rgba(131,211,255,.08);
+}
+
+.fill{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(90deg,#40d9ff,#4c8cff 53%,#9a71ff);
+  box-shadow:0 0 15px rgba(71,204,255,.20);
+}
+
+.fill::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(100deg,transparent,rgba(255,255,255,.36),transparent);
+  transform:translateX(-120%);
+  animation:barShine 2.8s ease-in-out infinite;
+}
+
+@keyframes barShine{
+  0%,45%{transform:translateX(-120%)}
+  75%,100%{transform:translateX(120%)}
+}
+
+.note{
+  color:#7f9db0;
+}
+
+.low-confidence{
+  color:#ffe0a0;
+  border:1px solid rgba(255,210,113,.15);
+  background:rgba(190,128,26,.11);
+}
+
+.unknown-box{
+  color:#ffc3c3;
+  border-color:rgba(255,132,132,.18);
+  background:rgba(189,56,56,.10);
+}
+
+/* ---------- JOURNAL ---------- */
+
+.journal-count{
+  color:#9fb9c9;
+}
+
+.journal-empty{
+  color:#8faec0;
+  border-color:rgba(117,208,255,.18);
+  background:rgba(11,41,69,.48);
+}
+
+.journal-card{
+  border:1px solid rgba(104,208,255,.16);
+  background:
+    linear-gradient(145deg,rgba(12,44,75,.76),rgba(6,29,55,.70));
+  box-shadow:
+    0 16px 42px rgba(0,7,25,.24),
+    inset 0 1px 0 rgba(255,255,255,.045);
+  transition:transform .27s ease,border-color .27s ease,box-shadow .27s ease;
+}
+
+.journal-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(107,219,255,.30);
+  box-shadow:
+    0 23px 52px rgba(0,7,26,.34),
+    0 0 28px rgba(64,202,255,.055);
+}
+
+.journal-thumb{
+  background:#07182b;
+}
+
+.journal-body h3{
+  color:#fff;
+}
+
+.journal-body .sub{
+  color:#8eacbd;
+}
+
+.journal-body .score{
+  color:#72f0c7;
+  border:1px solid rgba(105,232,193,.14);
+  background:rgba(53,205,158,.09);
+}
+
+.journal-location{
+  color:#9fc1d3;
+}
+
+/* ---------- TOAST / FOOTER ---------- */
+
+.toast{
+  border:1px solid rgba(99,216,255,.20);
+  background:rgba(4,25,48,.90);
+  box-shadow:
+    0 16px 42px rgba(0,0,0,.33),
+    0 0 28px rgba(64,202,255,.08);
+  backdrop-filter:blur(16px);
+}
+
+footer{
+  color:#7898aa;
+  margin-top:28px;
+  border-top:1px solid rgba(114,208,255,.08);
+}
+
+/* ---------- SCROLL REVEAL ---------- */
+
+.motion-reveal{
+  opacity:0;
+  translate:0 18px;
+  transition:
+    opacity .68s ease var(--reveal-delay,0ms),
+    translate .68s cubic-bezier(.2,.75,.2,1) var(--reveal-delay,0ms);
+}
+
+.motion-reveal.is-visible{
+  opacity:1;
+  translate:0 0;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media(max-width:900px){
+  .hero{
+    min-height:auto;
+    padding:42px 30px;
+  }
+
+  .hero-card{
+    animation:none;
+  }
+}
+
+@media(max-width:620px){
+  .container{
+    width:min(100% - 16px,1240px);
+  }
+
+  header{
+    top:6px;
+    margin-top:6px;
+    padding:11px 12px;
+    border-radius:17px;
+  }
+
+  .logo{
+    font-size:21px;
+  }
+
+  .nav-links{
+    gap:4px;
+  }
+
+  .nav-links a{
+    padding:7px 8px;
+    font-size:12px;
+  }
+
+  .hero{
+    margin-top:10px;
+    padding:34px 20px 28px;
+    border-radius:25px;
+  }
+
+  .hero h1{
+    font-size:clamp(44px,14vw,61px);
+    letter-spacing:-2.3px;
+  }
+
+  .hero p{
+    font-size:15px;
+    line-height:1.8;
+  }
+
+  .hero-card{
+    border-radius:24px;
+  }
+
+  .card{
+    border-radius:22px;
+    padding:17px;
+  }
+
+  .upload-box{
+    border-radius:19px;
+  }
+
+  .info{
+    border-radius:15px;
+  }
+
+  .toast{
+    left:12px;
+    right:12px;
+    bottom:12px;
+    text-align:center;
+  }
+}
+
+/* comfortable motion setting */
+@media(prefers-reduced-motion:reduce){
+  *,
+  *::before,
+  *::after{
+    scroll-behavior:auto!important;
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+  }
+
+  .motion-reveal{
+    opacity:1!important;
+    translate:none!important;
+  }
+}
+
+@media(pointer:coarse){
+  .card{
+    transform:none!important;
+  }
+
+  .card:hover{
+    --lift:0px;
+  }
+}
+
+
+/* =========================================================
    HERO — ANIMATED CLOUDS ONLY
    ========================================================= */
-.hero-cloud-only{min-height:360px;padding:0;position:relative;overflow:hidden;isolation:isolate}
-.hero-cloud-only::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 48%,rgba(126,224,255,.17),transparent 28%),radial-gradient(circle at 70% 30%,rgba(135,103,255,.10),transparent 26%);animation:cloudSceneGlow 6s ease-in-out infinite alternate}
-.cloud-scene{position:relative;width:100%;height:100%;min-height:360px;overflow:hidden;border-radius:inherit;transform:translateZ(0)}
-.cloud-scene::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 22% 30%,rgba(255,255,255,.07) 0 1px,transparent 1.8px),radial-gradient(circle at 78% 24%,rgba(117,229,255,.16) 0 1.5px,transparent 2.2px),radial-gradient(circle at 63% 74%,rgba(181,154,255,.12) 0 1px,transparent 1.8px);background-size:84px 84px,116px 116px,142px 142px;opacity:.62;animation:cloudStarsDrift 16s linear infinite}
-.css-cloud{position:absolute;width:190px;height:62px;border-radius:999px;background:linear-gradient(180deg,#fff 0%,#edf6ff 56%,#cbd6f3 100%);box-shadow:0 18px 32px rgba(0,4,28,.28),inset 0 5px 13px rgba(255,255,255,.92),inset 0 -10px 18px rgba(137,146,214,.23),0 0 30px rgba(113,210,255,.13);filter:drop-shadow(0 10px 18px rgba(1,8,33,.18));will-change:transform}
-.cloud-puff{position:absolute;display:block;border-radius:50%;background:radial-gradient(circle at 34% 28%,#fff 0%,#f4f8ff 43%,#d8def6 76%,#bec7ea 100%);box-shadow:inset 5px 7px 11px rgba(255,255,255,.88),inset -8px -10px 17px rgba(130,139,207,.16)}
-.puff-1{width:84px;height:84px;left:26px;bottom:14px}.puff-2{width:104px;height:104px;left:67px;bottom:18px}.puff-3{width:77px;height:77px;right:12px;bottom:8px}
-.cloud-highlight{position:absolute;left:34px;top:-32px;width:78px;height:40px;border-radius:50%;background:rgba(255,255,255,.52);filter:blur(10px);transform:rotate(-12deg)}
-.cloud-main-visual{width:230px;height:74px;left:50%;top:49%;z-index:6;transform:translate(-50%,-50%);animation:mainCloudFloat 5.2s ease-in-out infinite}
-.cloud-main-visual .puff-1{width:100px;height:100px;left:28px;bottom:17px}.cloud-main-visual .puff-2{width:126px;height:126px;left:75px;bottom:20px}.cloud-main-visual .puff-3{width:92px;height:92px;right:10px;bottom:10px}
-.cloud-back{opacity:.34;transform:scale(.60);filter:blur(1px);z-index:2}.cloud-mid{opacity:.60;transform:scale(.78);z-index:3}.cloud-front{opacity:.56;transform:scale(.68);z-index:4}
-.cloud-1{top:18%;left:-35%;animation:cloudTravelBack 20s linear infinite}.cloud-2{top:65%;left:-42%;animation:cloudTravelMid 15s linear infinite 2s}.cloud-4{top:31%;left:-38%;animation:cloudTravelFront 12s linear infinite 4s}
-.cloud-orbit{position:absolute;left:50%;top:50%;border:1px solid rgba(105,219,255,.10);border-radius:50%;pointer-events:none}.cloud-orbit-a{width:280px;height:280px;margin:-140px 0 0 -140px;animation:cloudOrbitSpin 18s linear infinite}.cloud-orbit-b{width:390px;height:210px;margin:-105px 0 0 -195px;border-color:rgba(145,111,255,.08);transform:rotate(-13deg);animation:cloudOrbitPulse 7s ease-in-out infinite alternate}
-.cloud-spark{position:absolute;width:5px;height:5px;border-radius:50%;background:#baf5ff;box-shadow:0 0 12px rgba(96,224,255,.85);opacity:.32;animation:cloudSpark 3.6s ease-in-out infinite}.spark-1{left:22%;top:28%;animation-delay:.2s}.spark-2{right:23%;top:22%;animation-delay:1.2s}.spark-3{left:29%;bottom:22%;animation-delay:2.1s}.spark-4{right:30%;bottom:28%;animation-delay:2.8s}
-@keyframes mainCloudFloat{0%,100%{transform:translate(-50%,-50%) translateY(0) rotate(-1deg) scale(1)}50%{transform:translate(-50%,-50%) translateY(-15px) rotate(1deg) scale(1.025)}}
-@keyframes cloudTravelBack{from{transform:translateX(0) scale(.60)}to{transform:translateX(900px) scale(.60)}}
-@keyframes cloudTravelMid{from{transform:translateX(0) scale(.78)}to{transform:translateX(980px) scale(.78)}}
-@keyframes cloudTravelFront{from{transform:translateX(0) scale(.68)}to{transform:translateX(930px) scale(.68)}}
-@keyframes cloudSceneGlow{from{opacity:.70;transform:scale(.98)}to{opacity:1;transform:scale(1.05)}}
-@keyframes cloudStarsDrift{from{background-position:0 0,20px 30px,40px 60px}to{background-position:84px 30px,136px 65px,182px 90px}}
-@keyframes cloudOrbitSpin{to{transform:rotate(360deg)}}@keyframes cloudOrbitPulse{from{opacity:.35;transform:rotate(-13deg) scale(.93)}to{opacity:.85;transform:rotate(-13deg) scale(1.05)}}@keyframes cloudSpark{0%,100%{opacity:.12;transform:scale(.72)}50%{opacity:.70;transform:scale(1.35)}}
-@media(max-width:900px){.hero-cloud-only,.cloud-scene{min-height:310px}.cloud-main-visual{transform:translate(-50%,-50%) scale(.88)}}
-@media(max-width:620px){.hero-cloud-only,.cloud-scene{min-height:245px}.cloud-main-visual{width:190px;height:61px}.cloud-main-visual .puff-1{width:82px;height:82px}.cloud-main-visual .puff-2{width:105px;height:105px;left:63px}.cloud-main-visual .puff-3{width:75px;height:75px}}
-@media(prefers-reduced-motion:reduce){.css-cloud,.cloud-orbit,.cloud-spark,.cloud-scene::before,.hero-cloud-only::after{animation:none!important}}
+
+.hero-cloud-only{
+  min-height:360px;
+  padding:0;
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+
+.hero-cloud-only::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 48%,rgba(126,224,255,.17),transparent 28%),
+    radial-gradient(circle at 70% 30%,rgba(135,103,255,.10),transparent 26%);
+  animation:cloudSceneGlow 6s ease-in-out infinite alternate;
+}
+
+.cloud-scene{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-height:360px;
+  overflow:hidden;
+  border-radius:inherit;
+  transform:translateZ(0);
+}
+
+.cloud-scene::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 22% 30%,rgba(255,255,255,.07) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 78% 24%,rgba(117,229,255,.16) 0 1.5px,transparent 2.2px),
+    radial-gradient(circle at 63% 74%,rgba(181,154,255,.12) 0 1px,transparent 1.8px);
+  background-size:84px 84px,116px 116px,142px 142px;
+  opacity:.62;
+  animation:cloudStarsDrift 16s linear infinite;
+}
+
+.css-cloud{
+  --cloud-base:#eef8ff;
+  --cloud-shadow:#b9c4ee;
+  position:absolute;
+  width:190px;
+  height:62px;
+  border-radius:999px;
+  background:
+    linear-gradient(180deg,#ffffff 0%,#edf6ff 56%,#cbd6f3 100%);
+  box-shadow:
+    0 18px 32px rgba(0,4,28,.28),
+    inset 0 5px 13px rgba(255,255,255,.92),
+    inset 0 -10px 18px rgba(137,146,214,.23),
+    0 0 30px rgba(113,210,255,.13);
+  filter:drop-shadow(0 10px 18px rgba(1,8,33,.18));
+  will-change:transform;
+}
+
+.cloud-puff{
+  position:absolute;
+  display:block;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 34% 28%,#ffffff 0%,#f4f8ff 43%,#d8def6 76%,#bec7ea 100%);
+  box-shadow:
+    inset 5px 7px 11px rgba(255,255,255,.88),
+    inset -8px -10px 17px rgba(130,139,207,.16);
+}
+
+.puff-1{
+  width:84px;
+  height:84px;
+  left:26px;
+  bottom:14px;
+}
+
+.puff-2{
+  width:104px;
+  height:104px;
+  left:67px;
+  bottom:18px;
+}
+
+.puff-3{
+  width:77px;
+  height:77px;
+  right:12px;
+  bottom:8px;
+}
+
+.cloud-highlight{
+  position:absolute;
+  left:34px;
+  top:-32px;
+  width:78px;
+  height:40px;
+  border-radius:50%;
+  background:rgba(255,255,255,.52);
+  filter:blur(10px);
+  transform:rotate(-12deg);
+}
+
+.cloud-main-visual{
+  width:230px;
+  height:74px;
+  left:50%;
+  top:49%;
+  z-index:6;
+  transform:translate(-50%,-50%);
+  animation:mainCloudFloat 5.2s ease-in-out infinite;
+}
+
+.cloud-main-visual .puff-1{
+  width:100px;
+  height:100px;
+  left:28px;
+  bottom:17px;
+}
+
+.cloud-main-visual .puff-2{
+  width:126px;
+  height:126px;
+  left:75px;
+  bottom:20px;
+}
+
+.cloud-main-visual .puff-3{
+  width:92px;
+  height:92px;
+  right:10px;
+  bottom:10px;
+}
+
+.cloud-back{
+  opacity:.34;
+  transform:scale(.60);
+  filter:blur(1px);
+  z-index:2;
+}
+
+.cloud-mid{
+  opacity:.60;
+  transform:scale(.78);
+  z-index:3;
+}
+
+.cloud-front{
+  opacity:.56;
+  transform:scale(.68);
+  z-index:4;
+}
+
+.cloud-1{
+  top:18%;
+  left:-35%;
+  animation:cloudTravelBack 20s linear infinite;
+}
+
+.cloud-2{
+  top:65%;
+  left:-42%;
+  animation:cloudTravelMid 15s linear infinite 2s;
+}
+
+.cloud-4{
+  top:31%;
+  left:-38%;
+  animation:cloudTravelFront 12s linear infinite 4s;
+}
+
+.cloud-orbit{
+  position:absolute;
+  left:50%;
+  top:50%;
+  border:1px solid rgba(105,219,255,.10);
+  border-radius:50%;
+  pointer-events:none;
+}
+
+.cloud-orbit-a{
+  width:280px;
+  height:280px;
+  margin:-140px 0 0 -140px;
+  animation:cloudOrbitSpin 18s linear infinite;
+}
+
+.cloud-orbit-b{
+  width:390px;
+  height:210px;
+  margin:-105px 0 0 -195px;
+  border-color:rgba(145,111,255,.08);
+  transform:rotate(-13deg);
+  animation:cloudOrbitPulse 7s ease-in-out infinite alternate;
+}
+
+.cloud-spark{
+  position:absolute;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#baf5ff;
+  box-shadow:0 0 12px rgba(96,224,255,.85);
+  opacity:.32;
+  animation:cloudSpark 3.6s ease-in-out infinite;
+}
+
+.spark-1{left:22%;top:28%;animation-delay:.2s}
+.spark-2{right:23%;top:22%;animation-delay:1.2s}
+.spark-3{left:29%;bottom:22%;animation-delay:2.1s}
+.spark-4{right:30%;bottom:28%;animation-delay:2.8s}
+
+@keyframes mainCloudFloat{
+  0%,100%{
+    transform:translate(-50%,-50%) translateY(0) rotate(-1deg) scale(1);
+  }
+  50%{
+    transform:translate(-50%,-50%) translateY(-15px) rotate(1deg) scale(1.025);
+  }
+}
+
+@keyframes cloudTravelBack{
+  from{transform:translateX(0) scale(.60)}
+  to{transform:translateX(900px) scale(.60)}
+}
+
+@keyframes cloudTravelMid{
+  from{transform:translateX(0) scale(.78)}
+  to{transform:translateX(980px) scale(.78)}
+}
+
+@keyframes cloudTravelFront{
+  from{transform:translateX(0) scale(.68)}
+  to{transform:translateX(930px) scale(.68)}
+}
+
+@keyframes cloudSceneGlow{
+  from{opacity:.70;transform:scale(.98)}
+  to{opacity:1;transform:scale(1.05)}
+}
+
+@keyframes cloudStarsDrift{
+  from{background-position:0 0,20px 30px,40px 60px}
+  to{background-position:84px 30px,136px 65px,182px 90px}
+}
+
+@keyframes cloudOrbitSpin{
+  to{transform:rotate(360deg)}
+}
+
+@keyframes cloudOrbitPulse{
+  from{opacity:.35;transform:rotate(-13deg) scale(.93)}
+  to{opacity:.85;transform:rotate(-13deg) scale(1.05)}
+}
+
+@keyframes cloudSpark{
+  0%,100%{opacity:.12;transform:scale(.72)}
+  50%{opacity:.70;transform:scale(1.35)}
+}
+
+@media(max-width:900px){
+  .hero-cloud-only,
+  .cloud-scene{
+    min-height:310px;
+  }
+
+  .cloud-main-visual{
+    transform:translate(-50%,-50%) scale(.88);
+  }
+}
+
+@media(max-width:620px){
+  .hero-cloud-only,
+  .cloud-scene{
+    min-height:245px;
+  }
+
+  .cloud-main-visual{
+    width:190px;
+    height:61px;
+  }
+
+  .cloud-main-visual .puff-1{
+    width:82px;height:82px;
+  }
+
+  .cloud-main-visual .puff-2{
+    width:105px;height:105px;
+    left:63px;
+  }
+
+  .cloud-main-visual .puff-3{
+    width:75px;height:75px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .css-cloud,
+  .cloud-orbit,
+  .cloud-spark,
+  .cloud-scene::before,
+  .hero-cloud-only::after{
+    animation:none!important;
+  }
+}
+
+
+/* =========================================================
+   MEKLENS AI — INTERACTIVE 3D ATMOSPHERE UPGRADE
+   ========================================================= */
+
+:root{
+  --accent-a:#45dcff;
+  --accent-b:#5a91ff;
+  --accent-c:#8f74ff;
+  --corner-glow:rgba(85,223,255,.30);
+}
+
+/* Brand polish */
+.logo{
+  position:relative;
+  letter-spacing:-.8px;
+}
+.logo::before{
+  content:"";
+  width:11px;
+  height:11px;
+  display:inline-block;
+  margin-right:10px;
+  border-radius:50%;
+  background:radial-gradient(circle at 32% 32%,#ffffff 0%,#9cf0ff 24%,#55c9ff 65%,#4f66ff 100%);
+  box-shadow:0 0 14px rgba(91,227,255,.65);
+  vertical-align:middle;
+}
+
+/* Smooth interactive panels */
+.info,
+.location-panel,
+.journal-card,
+.upload-box,
+.mode-button,
+.nav-links a,
+.hero-card{
+  transform-origin:center;
+}
+
+.info,
+.location-panel,
+.journal-card{
+  cursor:pointer;
+}
+
+.info.is-expanded,
+.location-panel.is-expanded,
+.journal-card.is-expanded{
+  transform:translateY(-6px) scale(1.01);
+  border-color:rgba(111,221,255,.32)!important;
+  box-shadow:
+    0 24px 54px rgba(0,8,28,.32),
+    0 0 28px rgba(69,213,255,.10),
+    inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+/* Sliding tab accent */
+.input-mode-switch{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  --slider-left:0%;
+}
+.input-mode-switch::before{
+  content:"";
+  position:absolute;
+  top:6px;
+  bottom:6px;
+  left:6px;
+  width:calc(50% - 9px);
+  border-radius:18px;
+  background:linear-gradient(135deg,rgba(75,217,255,.92),rgba(83,103,255,.92),rgba(146,107,255,.92));
+  box-shadow:0 12px 30px rgba(44,120,255,.28), inset 0 1px 0 rgba(255,255,255,.16);
+  transform:translateX(var(--slider-left));
+  transition:transform .35s cubic-bezier(.2,.8,.2,1);
+  z-index:0;
+}
+.mode-button{
+  position:relative;
+  z-index:1;
+  background:transparent!important;
+}
+.mode-button.active{
+  box-shadow:none!important;
+}
+
+/* Inputs / text fields focus */
+.location-manual input,
+input[type="text"],
+input[type="search"],
+textarea{
+  transition:border-color .25s ease, box-shadow .25s ease, transform .25s ease, background .25s ease;
+}
+.location-manual input:focus,
+input[type="text"]:focus,
+input[type="search"]:focus,
+textarea:focus{
+  transform:translateY(-1px);
+  box-shadow:
+    0 0 0 3px rgba(78,210,255,.16),
+    0 8px 24px rgba(37,109,184,.18)!important;
+}
+
+/* Animated media frame */
+.upload-box{
+  position:relative;
+  overflow:hidden;
+}
+.upload-box::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  padding:1px;
+  background:linear-gradient(130deg,rgba(76,224,255,.9),rgba(90,115,255,.72),rgba(152,104,255,.8),rgba(76,224,255,.9));
+  background-size:220% 220%;
+  animation:frameShift 7s linear infinite;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  pointer-events:none;
+  opacity:.85;
+}
+.upload-box::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 15% 15%,rgba(129,244,255,.10),transparent 20%),
+    radial-gradient(circle at 85% 85%,rgba(132,116,255,.12),transparent 22%);
+  pointer-events:none;
+  animation:frameGlow 6s ease-in-out infinite alternate;
+}
+#preview,
+#cameraVideo{
+  border-radius:24px;
+  box-shadow:
+    0 0 0 1px rgba(123,217,255,.20),
+    0 18px 46px rgba(0,0,0,.22),
+    0 0 34px rgba(77,207,255,.08);
+  transition:transform .35s ease, box-shadow .35s ease, filter .35s ease;
+}
+.upload-box:hover #preview,
+.upload-box:hover #cameraVideo{
+  transform:scale(1.012);
+  box-shadow:
+    0 0 0 1px rgba(132,224,255,.32),
+    0 22px 52px rgba(0,0,0,.28),
+    0 0 42px rgba(95,215,255,.11);
+  filter:saturate(1.03);
+}
+@keyframes frameShift{
+  0%{background-position:0% 50%}
+  100%{background-position:200% 50%}
+}
+@keyframes frameGlow{
+  from{opacity:.45}
+  to{opacity:.92}
+}
+
+/* Hero 3D cloud scene */
+.hero-cloud-only{
+  min-height:388px;
+  padding:0;
+  perspective:1400px;
+  overflow:hidden;
+  cursor:pointer;
+}
+.hero-cloud-only::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(115,230,255,.18),transparent 28%),
+    radial-gradient(circle at 80% 25%,rgba(134,120,255,.14),transparent 24%);
+  pointer-events:none;
+  animation:heroFieldGlow 8s ease-in-out infinite alternate;
+}
+.cloud-scene{
+  position:relative;
+  width:100%;
+  min-height:388px;
+  height:100%;
+  transform-style:preserve-3d;
+  overflow:hidden;
+}
+.cloud-scene-core{
+  position:absolute;
+  inset:0;
+  transform-style:preserve-3d;
+  transform:
+    rotateX(var(--scene-rx,0deg))
+    rotateY(var(--scene-ry,0deg))
+    translateZ(0);
+  transition:transform .28s ease;
+}
+.atmo-lines{
+  position:absolute;
+  inset:16% 14% 14% 14%;
+  pointer-events:none;
+}
+.atmo-line{
+  position:absolute;
+  left:0;
+  right:0;
+  height:1px;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(95,215,255,.16),transparent);
+  box-shadow:0 0 22px rgba(96,217,255,.06);
+}
+.atmo-line-1{top:18%}
+.atmo-line-2{top:50%}
+.atmo-line-3{top:82%}
+
+.atmo-rail{
+  position:absolute;
+  right:22px;
+  top:18%;
+  bottom:18%;
+  width:24px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+  z-index:8;
+}
+.atmo-rail::before{
+  content:"";
+  position:absolute;
+  top:8px;
+  bottom:8px;
+  width:2px;
+  border-radius:999px;
+  background:linear-gradient(180deg,rgba(104,224,255,.25),rgba(144,118,255,.22),rgba(104,224,255,.25));
+  box-shadow:0 0 18px rgba(79,212,255,.14);
+}
+.atmo-dot{
+  position:relative;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:rgba(182,231,255,.45);
+  box-shadow:0 0 0 4px rgba(98,220,255,.08);
+  z-index:1;
+  transition:transform .35s ease, background .35s ease, box-shadow .35s ease, opacity .35s ease;
+  opacity:.55;
+}
+.hero-cloud-only[data-altitude="low"] .atmo-dot-low,
+.hero-cloud-only[data-altitude="mid"] .atmo-dot-mid,
+.hero-cloud-only[data-altitude="high"] .atmo-dot-high{
+  opacity:1;
+  transform:scale(1.22);
+  background:#bff9ff;
+  box-shadow:0 0 0 6px rgba(100,229,255,.14),0 0 18px rgba(100,229,255,.58);
+}
+
+.cloud-stage{
+  position:absolute;
+  inset:0;
+  transform-style:preserve-3d;
+  --main-altitude:50%;
+}
+.hero-cloud-only[data-altitude="low"] .cloud-stage{--main-altitude:72%;}
+.hero-cloud-only[data-altitude="mid"] .cloud-stage{--main-altitude:50%;}
+.hero-cloud-only[data-altitude="high"] .cloud-stage{--main-altitude:28%;}
+
+.css-cloud{
+  transform-style:preserve-3d;
+}
+
+.cloud-main-visual{
+  width:232px;
+  height:74px;
+  left:50%;
+  top:var(--main-altitude);
+  z-index:6;
+  transform:
+    translate3d(-50%,-50%,85px)
+    rotateX(var(--cloud-rx,0deg))
+    rotateY(var(--cloud-ry,0deg));
+  animation:mainCloudFloat3d 6s ease-in-out infinite;
+  transition:top .9s cubic-bezier(.2,.8,.2,1), transform .28s ease;
+}
+.cloud-main-visual .cloud-highlight{
+  filter:blur(14px);
+}
+.cloud-layer{
+  filter:drop-shadow(0 10px 18px rgba(1,8,33,.16));
+}
+.cloud-1{
+  top:16%;
+  left:-32%;
+  animation:cloudTravelBack 22s linear infinite;
+}
+.cloud-2{
+  top:61%;
+  left:-36%;
+  animation:cloudTravelMid 17s linear infinite 2s;
+}
+.cloud-4{
+  top:34%;
+  left:-34%;
+  animation:cloudTravelFront 13s linear infinite 4s;
+}
+.cloud-back{opacity:.30; transform:translateZ(-90px) scale(.60);}
+.cloud-mid{opacity:.54; transform:translateZ(-25px) scale(.78);}
+.cloud-front{opacity:.62; transform:translateZ(15px) scale(.70);}
+
+.cloud-orbit{
+  pointer-events:none;
+}
+.cloud-orbit-a{
+  width:310px;
+  height:310px;
+  margin:-155px 0 0 -155px;
+}
+.cloud-orbit-b{
+  width:420px;
+  height:230px;
+  margin:-115px 0 0 -210px;
+}
+
+@keyframes mainCloudFloat3d{
+  0%,100%{
+    transform:
+      translate3d(-50%,-50%,85px)
+      rotateX(calc(var(--cloud-rx,0deg) - 2deg))
+      rotateY(calc(var(--cloud-ry,0deg) - 1deg))
+      translateY(0px);
+  }
+  50%{
+    transform:
+      translate3d(-50%,-50%,100px)
+      rotateX(calc(var(--cloud-rx,0deg) + 2deg))
+      rotateY(calc(var(--cloud-ry,0deg) + 1deg))
+      translateY(-14px);
+  }
+}
+@keyframes heroFieldGlow{
+  from{opacity:.62}
+  to{opacity:1}
+}
+
+/* Press / click animation */
+.press-pop{
+  animation:pressPop .34s ease;
+}
+@keyframes pressPop{
+  0%{transform:scale(1)}
+  45%{transform:scale(.985)}
+  100%{transform:scale(1)}
+}
+
+@media(max-width:900px){
+  .hero-cloud-only,
+  .cloud-scene{
+    min-height:330px;
+  }
+}
+@media(max-width:620px){
+  .hero-cloud-only,
+  .cloud-scene{
+    min-height:260px;
+  }
+  .atmo-rail{
+    right:14px;
+  }
+  .cloud-main-visual{
+    width:188px;
+    height:60px;
+  }
+}
+
+/* footer rename polish */
+footer{
+  opacity:.92;
+}
 
 </style>
 
-<link rel="stylesheet" href="theme.css">\n</head>
+</head>
 
 
 
@@ -1471,7 +3125,7 @@ footer{
 
 <header>
 
-  <div class="logo">CloudLens <span>AI</span></div>
+  <div class="logo">MekLens <span>AI</span></div>
 
 
 
@@ -1510,7 +3164,7 @@ footer{
 
     <p>
 
-      เลือกอัปโหลดภาพ หรือเปิดกล้อง Real Time ให้ CloudLens AI จำแนกเมฆ 10 ชนิดด้วยโมเดล
+      เลือกอัปโหลดภาพ หรือเปิดกล้อง Real Time ให้ MekLens AI จำแนกเมฆ 10 ชนิดด้วยโมเดล
 
       Google Teachable Machine พร้อมตรวจสถานที่จาก GPS/EXIF ของไฟล์ภาพโดยอัตโนมัติ
 
@@ -1522,44 +3176,62 @@ footer{
 
 
 
-  <div class="hero-card hero-cloud-only" aria-label="Animated cloud scene">
+  
+  <div class="hero-card hero-cloud-only" aria-label="3D animated cloud scene" data-altitude="mid">
     <div class="cloud-scene" aria-hidden="true">
-      <div class="cloud-orbit cloud-orbit-a"></div>
-      <div class="cloud-orbit cloud-orbit-b"></div>
+      <div class="cloud-scene-core">
+        <div class="atmo-lines">
+          <span class="atmo-line atmo-line-1"></span>
+          <span class="atmo-line atmo-line-2"></span>
+          <span class="atmo-line atmo-line-3"></span>
+        </div>
 
-      <div class="css-cloud cloud-back cloud-1">
-        <span class="cloud-puff puff-1"></span>
-        <span class="cloud-puff puff-2"></span>
-        <span class="cloud-puff puff-3"></span>
+        <div class="atmo-rail">
+          <span class="atmo-dot atmo-dot-low"></span>
+          <span class="atmo-dot atmo-dot-mid"></span>
+          <span class="atmo-dot atmo-dot-high"></span>
+        </div>
+
+        <div class="cloud-stage">
+          <div class="css-cloud cloud-layer cloud-back cloud-1">
+            <span class="cloud-puff puff-1"></span>
+            <span class="cloud-puff puff-2"></span>
+            <span class="cloud-puff puff-3"></span>
+          </div>
+
+          <div class="css-cloud cloud-layer cloud-mid cloud-2">
+            <span class="cloud-puff puff-1"></span>
+            <span class="cloud-puff puff-2"></span>
+            <span class="cloud-puff puff-3"></span>
+          </div>
+
+          <div class="css-cloud cloud-main-visual cloud-3">
+            <span class="cloud-puff puff-1"></span>
+            <span class="cloud-puff puff-2"></span>
+            <span class="cloud-puff puff-3"></span>
+            <span class="cloud-highlight"></span>
+          </div>
+
+          <div class="css-cloud cloud-layer cloud-front cloud-4">
+            <span class="cloud-puff puff-1"></span>
+            <span class="cloud-puff puff-2"></span>
+            <span class="cloud-puff puff-3"></span>
+          </div>
+        </div>
+
+        <div class="cloud-orbit cloud-orbit-a"></div>
+        <div class="cloud-orbit cloud-orbit-b"></div>
+
+        <div class="cloud-spark spark-1"></div>
+        <div class="cloud-spark spark-2"></div>
+        <div class="cloud-spark spark-3"></div>
+        <div class="cloud-spark spark-4"></div>
       </div>
-
-      <div class="css-cloud cloud-mid cloud-2">
-        <span class="cloud-puff puff-1"></span>
-        <span class="cloud-puff puff-2"></span>
-        <span class="cloud-puff puff-3"></span>
-      </div>
-
-      <div class="css-cloud cloud-main-visual cloud-3">
-        <span class="cloud-puff puff-1"></span>
-        <span class="cloud-puff puff-2"></span>
-        <span class="cloud-puff puff-3"></span>
-        <span class="cloud-highlight"></span>
-      </div>
-
-      <div class="css-cloud cloud-front cloud-4">
-        <span class="cloud-puff puff-1"></span>
-        <span class="cloud-puff puff-2"></span>
-        <span class="cloud-puff puff-3"></span>
-      </div>
-
-      <div class="cloud-spark spark-1"></div>
-      <div class="cloud-spark spark-2"></div>
-      <div class="cloud-spark spark-3"></div>
-      <div class="cloud-spark spark-4"></div>
     </div>
   </div>
 
 </section>
+
 
 
 
@@ -1861,7 +3533,7 @@ footer{
 
       <div class="note">
 
-        CloudLens AI จำแนกจากลักษณะในภาพเพียงอย่างเดียว
+        MekLens AI จำแนกจากลักษณะในภาพเพียงอย่างเดียว
 
         ข้อมูลสภาพแวดล้อมเป็นความรู้ทั่วไปที่เชื่อมกับชนิดเมฆ
 
@@ -1945,9 +3617,9 @@ footer{
 
 <footer>
 
-  CloudLens AI · Google Teachable Machine · Image Classification
+  MekLens AI · Google Teachable Machine · Image Classification
   <div style="margin-top:12px">
-    <button class="secondary" onclick="shareCloudLens()">📱 แชร์ลิงก์เว็บ</button>
+    <button class="secondary" onclick="shareMekLens()">📱 แชร์ลิงก์เว็บ</button>
   </div>
 
 </footer>
@@ -2554,7 +4226,7 @@ async function loadModel(){
 
 
 
-    console.log("CloudLens Model loaded");
+    console.log("MekLens Model loaded");
 
     console.log("Classes:", labels);
 
@@ -2870,8 +4542,7 @@ async function startCamera(){
     !navigator.mediaDevices.getUserMedia
   ){
     alert(
-      "เบราว์เซอร์นี้ไม่รองรับกล้อง Real Time\n" +
-      "กรุณาใช้ Chrome / Edge / Safari รุ่นใหม่"
+      "เบราว์เซอร์นี้ไม่รองรับกล้อง Real Time กรุณาใช้ Chrome / Edge / Safari รุ่นใหม่"
     );
     return;
   }
@@ -2949,7 +4620,7 @@ async function startCamera(){
       location.hostname !== "localhost"
     ){
       message +=
-        "\nกล้องบนเว็บควรเปิดผ่าน HTTPS หรือ localhost";
+        " กล้องบนเว็บควรเปิดผ่าน HTTPS หรือ localhost";
     }
 
     alert(message);
@@ -3639,11 +5310,7 @@ async function analyzeImage(){
 
       alert(
 
-        "ชื่อ Class จากโมเดลยังไม่ตรงกับฐานข้อมูล\n\n" +
-
-        "Class ที่ AI ส่งมา: " + best.className + "\n\n" +
-
-        "กรุณาตรวจชื่อ Class ใน Teachable Machine"
+        "ชื่อ Class จากโมเดลยังไม่ตรงกับฐานข้อมูล · Class ที่ AI ส่งมา: " + best.className + " · กรุณาตรวจชื่อ Class ใน Teachable Machine"
 
       );
 
@@ -3908,7 +5575,7 @@ function showTopPredictions(predictions){
 
 
 
-const JOURNAL_KEY = "CloudLens_SkyJournal_v1";
+const JOURNAL_KEY = "MekLens_SkyJournal_v1";
 
 const JOURNAL_LIMIT = 30;
 
@@ -4393,7 +6060,7 @@ async function exportResultCard(){
   card.innerHTML = `
     <div class="export-header">
       <div class="export-brand">
-        CloudLens <span>AI</span>
+        MekLens <span>AI</span>
       </div>
       <div class="export-date">
         ${dateText}
@@ -4437,7 +6104,7 @@ async function exportResultCard(){
       font-size:11px;
       line-height:1.6;
     ">
-      CloudLens AI จำแนกจากภาพด้วย Google Teachable Machine
+      MekLens AI จำแนกจากภาพด้วย Google Teachable Machine
       · ข้อมูลสภาพอากาศเป็นความรู้ประกอบ ไม่ใช่พยากรณ์แบบเรียลไทม์
     </div>
   `;
@@ -4469,7 +6136,7 @@ async function exportResultCard(){
         : currentResult.cloudKey;
 
     link.download =
-      `CloudLens_${safeName}_${Date.now()}.png`;
+      `MekLens_${safeName}_${Date.now()}.png`;
 
     link.href =
       canvas.toDataURL("image/png");
@@ -4567,14 +6234,14 @@ window.addEventListener(
 
 
 
-function shareCloudLens(){
+function shareMekLens(){
 
   const url = window.location.href.split("#")[0];
 
   if(navigator.share){
     navigator.share({
-      title:"CloudLens AI",
-      text:"เปิด CloudLens AI เพื่อวิเคราะห์ชนิดเมฆ",
+      title:"MekLens AI",
+      text:"เปิด MekLens AI เพื่อวิเคราะห์ชนิดเมฆ",
       url
     }).catch(() => {});
     return;
@@ -4590,10 +6257,424 @@ function shareCloudLens(){
   window.prompt("คัดลอกลิงก์นี้", url);
 }
 
+
+/* =========================================================
+   CLOUDLENS AURORA UI MOTION
+   Additive interaction layer only
+   ========================================================= */
+(function(){
+
+  const reduceMotion =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function addRevealTargets(root = document){
+
+    const selector =
+      ".hero > *, .main-grid > .card, .section-heading, #journal > .card, footer";
+
+    root.querySelectorAll(selector).forEach((el,index) => {
+
+      if(el.dataset.motionReady === "1"){
+        return;
+      }
+
+      el.dataset.motionReady = "1";
+      el.classList.add("motion-reveal");
+
+      el.style.setProperty(
+        "--reveal-delay",
+        `${Math.min(index * 70, 210)}ms`
+      );
+
+      if(reduceMotion){
+        el.classList.add("is-visible");
+        return;
+      }
+
+      revealObserver.observe(el);
+    });
+  }
+
+
+  const revealObserver =
+    reduceMotion
+      ? null
+      : new IntersectionObserver(
+          entries => {
+
+            entries.forEach(entry => {
+
+              if(entry.isIntersecting){
+
+                entry.target.classList.add("is-visible");
+                revealObserver.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold:.12,
+            rootMargin:"0px 0px -34px 0px"
+          }
+        );
+
+
+  function setupCardTilt(){
+
+    if(
+      reduceMotion ||
+      !window.matchMedia("(pointer:fine)").matches
+    ){
+      return;
+    }
+
+    document.querySelectorAll(".card").forEach(card => {
+
+      if(card.dataset.tiltReady === "1"){
+        return;
+      }
+
+      card.dataset.tiltReady = "1";
+
+      card.addEventListener("pointermove",event => {
+
+        const rect =
+          card.getBoundingClientRect();
+
+        const px =
+          (event.clientX - rect.left) / rect.width;
+
+        const py =
+          (event.clientY - rect.top) / rect.height;
+
+        const rotateY =
+          (px - .5) * 2.4;
+
+        const rotateX =
+          (.5 - py) * 2.0;
+
+        card.style.setProperty(
+          "--tilt-x",
+          `${rotateX.toFixed(2)}deg`
+        );
+
+        card.style.setProperty(
+          "--tilt-y",
+          `${rotateY.toFixed(2)}deg`
+        );
+
+        card.style.setProperty(
+          "--card-x",
+          `${(px * 100).toFixed(1)}%`
+        );
+
+        card.style.setProperty(
+          "--card-y",
+          `${(py * 100).toFixed(1)}%`
+        );
+      });
+
+      card.addEventListener("pointerleave",() => {
+
+        card.style.setProperty(
+          "--tilt-x",
+          "0deg"
+        );
+
+        card.style.setProperty(
+          "--tilt-y",
+          "0deg"
+        );
+      });
+    });
+  }
+
+
+  function setupButtonRipple(){
+
+    document.addEventListener(
+      "pointerdown",
+      event => {
+
+        const button =
+          event.target.closest("button");
+
+        if(
+          !button ||
+          button.disabled ||
+          reduceMotion
+        ){
+          return;
+        }
+
+        const rect =
+          button.getBoundingClientRect();
+
+        const ripple =
+          document.createElement("span");
+
+        ripple.className =
+          "ui-ripple";
+
+        ripple.style.left =
+          `${event.clientX - rect.left}px`;
+
+        ripple.style.top =
+          `${event.clientY - rect.top}px`;
+
+        button.appendChild(ripple);
+
+        window.setTimeout(
+          () => ripple.remove(),
+          680
+        );
+      },
+      {passive:true}
+    );
+  }
+
+
+  function setupAmbientPointer(){
+
+    if(
+      reduceMotion ||
+      !window.matchMedia("(pointer:fine)").matches
+    ){
+      return;
+    }
+
+    let ticking = false;
+    let latestX = 0;
+    let latestY = 0;
+
+    window.addEventListener(
+      "pointermove",
+      event => {
+
+        latestX = event.clientX;
+        latestY = event.clientY;
+
+        if(ticking){
+          return;
+        }
+
+        ticking = true;
+
+        requestAnimationFrame(() => {
+
+          const x =
+            Math.max(
+              0,
+              Math.min(
+                100,
+                latestX / window.innerWidth * 100
+              )
+            );
+
+          const y =
+            Math.max(
+              0,
+              Math.min(
+                100,
+                latestY / window.innerHeight * 100
+              )
+            );
+
+          document.documentElement.style.setProperty(
+            "--spot-x",
+            `${x.toFixed(1)}%`
+          );
+
+          document.documentElement.style.setProperty(
+            "--spot-y",
+            `${y.toFixed(1)}%`
+          );
+
+          ticking = false;
+        });
+      },
+      {passive:true}
+    );
+  }
+
+
+  function observeDynamicJournal(){
+
+    const journal =
+      document.getElementById("journalGrid");
+
+    if(!journal){
+      return;
+    }
+
+    const observer =
+      new MutationObserver(() => {
+
+        document
+          .querySelectorAll(".journal-card")
+          .forEach((card,index) => {
+
+            if(card.dataset.journalMotion === "1"){
+              return;
+            }
+
+            card.dataset.journalMotion = "1";
+
+            if(!reduceMotion){
+
+              card.animate(
+                [
+                  {
+                    opacity:0,
+                    transform:"translateY(10px) scale(.985)"
+                  },
+                  {
+                    opacity:1,
+                    transform:"translateY(0) scale(1)"
+                  }
+                ],
+                {
+                  duration:440,
+                  delay:Math.min(index * 45,180),
+                  easing:"cubic-bezier(.2,.75,.2,1)",
+                  fill:"both"
+                }
+              );
+            }
+          });
+      });
+
+    observer.observe(
+      journal,
+      {
+        childList:true,
+        subtree:true
+      }
+    );
+  }
+
+
+  window.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+      addRevealTargets();
+      setupCardTilt();
+      setupButtonRipple();
+      setupAmbientPointer();
+      observeDynamicJournal();
+    }
+  );
+
+})();
+
+
+/* =========================================================
+   MEKLENS AI — EXTRA INTERACTION UPGRADE
+   ========================================================= */
+(function(){
+  function syncModeSlider(mode){
+    const sw = document.querySelector(".input-mode-switch");
+    if(!sw) return;
+    sw.style.setProperty("--slider-left", mode === "camera" ? "calc(100% + 6px)" : "0%");
+    sw.dataset.mode = mode || "upload";
+  }
+
+  function upgradeSetInputMode(){
+    if(typeof window.setInputMode !== "function") return;
+    const original = window.setInputMode;
+    window.setInputMode = function(mode){
+      const result = original.apply(this, arguments);
+      syncModeSlider(mode);
+      return result;
+    };
+  }
+
+  function addInteractiveCards(){
+    const targets = document.querySelectorAll(".info, .location-panel, .journal-card");
+    targets.forEach((el) => {
+      if(el.dataset.mekTapReady === "1") return;
+      el.dataset.mekTapReady = "1";
+      el.addEventListener("click", () => {
+        el.classList.add("press-pop");
+        el.classList.toggle("is-expanded");
+        setTimeout(() => el.classList.remove("press-pop"), 360);
+      });
+    });
+
+    document.querySelectorAll(".upload-box, .hero-card, .mode-button, .nav-links a, button").forEach((el) => {
+      if(el.dataset.mekSoftReady === "1") return;
+      el.dataset.mekSoftReady = "1";
+      el.addEventListener("click", () => {
+        el.classList.add("press-pop");
+        setTimeout(() => el.classList.remove("press-pop"), 360);
+      });
+    });
+  }
+
+  function setupHeroScene(){
+    const hero = document.querySelector(".hero-cloud-only");
+    const scene = document.querySelector(".cloud-scene-core");
+    if(!hero || !scene) return;
+
+    const states = ["low","mid","high"];
+    let idx = 1;
+    let autoTimer = null;
+
+    function setState(next){
+      hero.dataset.altitude = next;
+    }
+
+    function nextState(){
+      idx = (idx + 1) % states.length;
+      setState(states[idx]);
+    }
+
+    hero.addEventListener("click", () => {
+      nextState();
+      restartAuto();
+    });
+
+    hero.addEventListener("pointermove", (event) => {
+      const rect = hero.getBoundingClientRect();
+      const px = ((event.clientX - rect.left) / rect.width) - 0.5;
+      const py = ((event.clientY - rect.top) / rect.height) - 0.5;
+      const rx = (-py * 12).toFixed(2) + "deg";
+      const ry = (px * 16).toFixed(2) + "deg";
+      hero.style.setProperty("--scene-rx", rx);
+      hero.style.setProperty("--scene-ry", ry);
+      hero.style.setProperty("--cloud-rx", (py * 10).toFixed(2) + "deg");
+      hero.style.setProperty("--cloud-ry", (px * 14).toFixed(2) + "deg");
+    });
+
+    hero.addEventListener("pointerleave", () => {
+      hero.style.setProperty("--scene-rx", "0deg");
+      hero.style.setProperty("--scene-ry", "0deg");
+      hero.style.setProperty("--cloud-rx", "0deg");
+      hero.style.setProperty("--cloud-ry", "0deg");
+    });
+
+    function restartAuto(){
+      if(autoTimer) clearInterval(autoTimer);
+      autoTimer = setInterval(nextState, 4200);
+    }
+
+    setState(states[idx]);
+    restartAuto();
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    syncModeSlider("upload");
+    upgradeSetInputMode();
+    addInteractiveCards();
+    setupHeroScene();
+  });
+})();
+
 </script>
 
 
 
-<script src="theme.js"></script>\n</body>
+</body>
 
 </html>
